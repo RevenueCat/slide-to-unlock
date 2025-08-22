@@ -79,6 +79,10 @@ private enum class SlideToUnlockValue { Start, End }
 /**
  * A fully customizable "slide-to-unlock" UI component for Jetpack Compose.
  *
+ * This component displays a track with a draggable thumb. The user can slide the thumb
+ * from the start to the end to trigger an action. The component supports a loading state
+ * where the thumb is locked at the end and displays a progress indicator.
+ *
  * Supports horizontal (default) and vertical orientations via [SlideOrientation].
  *
  * @param isSlided Whether the slider has been completed and locked.
@@ -159,7 +163,7 @@ public fun SlideToUnlock(
     trackShape = trackShape,
     thumbSize = thumbSize,
     paddingValues = paddings,
-    factionalThreshold = fractionalThreshold,
+    fractionalThreshold = fractionalThreshold,
     orientation = orientation,
   ) {
     hint(
@@ -209,7 +213,7 @@ private fun SlideToUnlockTrack(
   modifier: Modifier = Modifier,
   colors: SlideToUnlockColors,
   trackShape: Shape,
-  factionalThreshold: Float,
+  fractionalThreshold: Float,
   thumbSize: DpSize,
   paddingValues: PaddingValues,
   orientation: SlideOrientation,
@@ -278,7 +282,7 @@ private fun SlideToUnlockTrack(
           startOfTrackPx to SlideToUnlockValue.Start,
           endOfTrackPx to SlideToUnlockValue.End,
         ),
-        thresholds = { _, _ -> FractionalThreshold(fraction = factionalThreshold) },
+        thresholds = { _, _ -> FractionalThreshold(fraction = fractionalThreshold) },
         velocityThreshold = with(density) { SlideToUnlockDefaults.VelocityThreshold },
       ),
     content = content,
@@ -423,9 +427,4 @@ public object SlideToUnlockDefaults {
       }
     }
   }
-}
-
-public enum class SlideOrientation {
-  Horizontal,
-  Vertical,
 }
