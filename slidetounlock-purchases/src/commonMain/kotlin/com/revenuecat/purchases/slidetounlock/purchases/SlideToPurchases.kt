@@ -13,7 +13,7 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package com.revenuecat.slidetounlock.purchases
+package com.revenuecat.purchases.slidetounlock.purchases
 
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.getValue
@@ -34,10 +34,10 @@ import com.revenuecat.purchases.kmp.models.PromotionalOffer
 import com.revenuecat.purchases.kmp.models.StoreProduct
 import com.revenuecat.purchases.kmp.models.SubscriptionOption
 import com.revenuecat.purchases.kmp.models.WinBackOffer
-import com.revenuecat.slidetounlock.DefaultSlideToUnlockColors
-import com.revenuecat.slidetounlock.HintTexts
-import com.revenuecat.slidetounlock.SlideToUnlock
-import com.revenuecat.slidetounlock.SlideToUnlockColors
+import com.revenuecat.purchases.slidetounlock.DefaultSlideToUnlockColors
+import com.revenuecat.purchases.slidetounlock.HintTexts
+import com.revenuecat.purchases.slidetounlock.SlideToUnlock
+import com.revenuecat.purchases.slidetounlock.SlideToUnlockColors
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.IO
 import kotlinx.coroutines.launch

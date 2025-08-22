@@ -16,7 +16,7 @@
 @file:OptIn(ExperimentalMaterialApi::class)
 @file:Suppress("DEPRECATION")
 
-package com.revenuecat.slidetounlock
+package com.revenuecat.purchases.slidetounlock
 
 import androidx.compose.animation.AnimatedContent
 import androidx.compose.foundation.background
@@ -64,7 +64,7 @@ import androidx.compose.ui.unit.Dp
 import androidx.compose.ui.unit.DpSize
 import androidx.compose.ui.unit.IntOffset
 import androidx.compose.ui.unit.dp
-import com.revenuecat.slidetounlock.SlideToUnlockDefaults.ThumbSize
+import com.revenuecat.purchases.slidetounlock.SlideToUnlockDefaults.ThumbSize
 import com.skydoves.compose.effects.RememberedEffect
 import kotlin.math.roundToInt
 

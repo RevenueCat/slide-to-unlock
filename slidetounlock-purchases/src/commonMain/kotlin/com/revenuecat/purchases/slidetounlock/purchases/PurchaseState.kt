@@ -13,7 +13,7 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package com.revenuecat.slidetounlock.purchases
+package com.revenuecat.purchases.slidetounlock.purchases
 
 import androidx.compose.runtime.Stable
 import com.revenuecat.purchases.kmp.ktx.SuccessfulPurchase

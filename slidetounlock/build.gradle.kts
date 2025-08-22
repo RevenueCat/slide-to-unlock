@@ -85,7 +85,7 @@ kotlin {
 
 android {
     compileSdk =Configuration.compileSdk
-    namespace = "com.revenuecat.slidetounlock"
+    namespace = "com.revenuecat.purchases.slidetounlock"
     defaultConfig {
         minSdk = Configuration.minSdk
     }

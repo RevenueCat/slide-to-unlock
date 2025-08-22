@@ -63,9 +63,9 @@ import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.unit.DpSize
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
-import com.revenuecat.slidetounlock.DefaultSlideToUnlockColors
-import com.revenuecat.slidetounlock.HintTexts
-import com.revenuecat.slidetounlock.SlideToUnlock
+import com.revenuecat.purchases.slidetounlock.DefaultSlideToUnlockColors
+import com.revenuecat.purchases.slidetounlock.HintTexts
+import com.revenuecat.purchases.slidetounlock.SlideToUnlock
 import com.valentinilk.shimmer.shimmer
 import kotlinx.coroutines.delay
 
