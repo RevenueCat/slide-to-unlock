@@ -70,7 +70,7 @@ sourceSets {
 
 ## Usage
 
-You can easily implement a slide-to-unlock feature using the `SlideToUnlock` composable. It offers intuitive customization options for colors, text, shapes, and even the entire content of the thumb and hint, allowing you to create a wide variety of styles.
+You can easily implement a slide-to-unlock feature using the `SlideToUnlock` composable. It offers intuitive customization options for colors, text, shapes, and even the entire content of the thumb and hint, allowing you to create a wide variety of styles. If you want to just directly dive into the sample codes, check out the [demo project](https://github.com/RevenueCat/slide-to-unlock/tree/main/app).
 
 ### Basic Usage
 
@@ -323,6 +323,56 @@ SlideToUnlock(
         }
     },
     // ...
+)
+```
+
+### Customizing the Gesture Behavior
+
+You can customize the behavior and feel of the slide gesture using the `orientation` and `fractionalThreshold` parameters.
+
+#### Changing the Slide Orientation
+
+By default, the component operates horizontally. You can change this to a vertical slide by setting the `orientation` parameter to `SlideOrientation.Vertical`.
+
+When using a vertical orientation, it's important to provide appropriate size constraints to the component's modifier, as it will orient itself along the y-axis.
+
+**Example: A Vertical Slider**
+
+```kotlin
+var isSlided by remember { mutableStateOf(false) }
+
+SlideToUnlock(
+    isSlided = isSlided,
+    onSlideCompleted = { isSlided = true },
+    orientation = SlideOrientation.Vertical,
+    modifier = Modifier
+        .fillMaxHeight()
+        .width(80.dp) // A fixed width is recommended for vertical sliders
+        .padding(vertical = 32.dp)
+)
+```
+
+#### Adjusting the Slide Threshold
+
+The `fractionalThreshold` parameter controls how far the user must drag the thumb before the slide action is considered complete upon release. It is a `Float` value between `0.0` and `1.0`, representing the percentage of the track that must be covered.
+
+The default value is `0.85f` (85%), which requires a deliberate gesture. You can lower this value to make the slide easier to complete.
+
+**Example: An Easier-to-Complete Slider**
+
+This slider will "snap" to the end and trigger `onSlideCompleted` if the user drags it just past the halfway point.
+
+```kotlin
+var isSlided by remember { mutableStateOf(false) }
+
+SlideToUnlock(
+    isSlided = isSlided,
+    onSlideCompleted = { isSlided = true },
+    // The slide will complete if the user drags past the 50% mark.
+    fractionalThreshold = 0.5f,
+    modifier = Modifier
+        .fillMaxWidth()
+        .padding(16.dp)
 )
 ```
 
