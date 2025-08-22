@@ -6,6 +6,7 @@ Ensure your change is properly formatted by running:
 
 ```gradle
 ./gradlew spotlessApply
+./gradlew apiDump
 ```
 
 Please correct any failures before requesting a review.
