@@ -36,7 +36,7 @@ If you're using Version Catalog, you can configure the dependency by adding it t
 ```toml
 [versions]
 #...
-slidetounlock = "1.0.0"
+slidetounlock = "1.0.1"
 
 [libraries]
 #...
@@ -416,7 +416,7 @@ Slide to Unlock supports integrating features with [RevenueCat SDK](https://www.
 ```toml
 [versions]
 #...
-slidetounlockPurchases = "1.0.0"
+slidetounlockPurchases = "1.0.1"
 
 [libraries]
 #...
