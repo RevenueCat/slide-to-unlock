@@ -530,8 +530,8 @@ private fun SlideToUnlockStyle5() {
   SlideToUnlock(
     isSlided = isSlided,
     hintTexts = HintTexts.defaultHintTexts().copy(
-      defaultText = "Hi",
-      slidedText = "Hello",
+      defaultText = "Slide down",
+      slidedText = "Loading..",
     ),
     colors = colors,
     onSlideCompleted = { isSlided = true },
@@ -581,7 +581,7 @@ private fun SlideToUnlockStyle5() {
       ) { slided ->
         if (isCompleted) {
           StackedVerticalText(
-            text = "Failed: Check out your account",
+            text = "Failed",
             textColor = colors.slidedHintColor(),
           )
         } else if (!slided) {
