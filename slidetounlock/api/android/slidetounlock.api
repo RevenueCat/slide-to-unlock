@@ -56,6 +56,14 @@ public final class com/revenuecat/purchases/slidetounlock/HintTexts$Companion {
 	public final fun defaultHintTexts ()Lcom/revenuecat/purchases/slidetounlock/HintTexts;
 }
 
+public final class com/revenuecat/purchases/slidetounlock/SlideOrientation : java/lang/Enum {
+	public static final field Horizontal Lcom/revenuecat/purchases/slidetounlock/SlideOrientation;
+	public static final field Vertical Lcom/revenuecat/purchases/slidetounlock/SlideOrientation;
+	public static fun getEntries ()Lkotlin/enums/EnumEntries;
+	public static fun valueOf (Ljava/lang/String;)Lcom/revenuecat/purchases/slidetounlock/SlideOrientation;
+	public static fun values ()[Lcom/revenuecat/purchases/slidetounlock/SlideOrientation;
+}
+
 public abstract interface class com/revenuecat/purchases/slidetounlock/SlideToUnlockColors {
 	public abstract fun hintColor-XeAY9LY (FLandroidx/compose/runtime/Composer;I)J
 	public abstract fun progressColor-WaAFU9c (Landroidx/compose/runtime/Composer;I)J
@@ -70,14 +78,14 @@ public abstract interface class com/revenuecat/purchases/slidetounlock/SlideToUn
 public final class com/revenuecat/purchases/slidetounlock/SlideToUnlockDefaults {
 	public static final field $stable I
 	public static final field INSTANCE Lcom/revenuecat/purchases/slidetounlock/SlideToUnlockDefaults;
-	public final fun Hint (Lcom/revenuecat/purchases/slidetounlock/HintTexts;ZFLcom/revenuecat/purchases/slidetounlock/SlideToUnlockColors;Landroidx/compose/foundation/layout/PaddingValues;Landroidx/compose/ui/Modifier;Landroidx/compose/runtime/Composer;II)V
-	public final fun Thumb-8HUqYh0 (ZJLcom/revenuecat/purchases/slidetounlock/SlideToUnlockColors;Landroidx/compose/ui/Modifier;Landroidx/compose/runtime/Composer;II)V
+	public final fun Hint (Lcom/revenuecat/purchases/slidetounlock/HintTexts;ZFLcom/revenuecat/purchases/slidetounlock/SlideToUnlockColors;Landroidx/compose/foundation/layout/PaddingValues;Lcom/revenuecat/purchases/slidetounlock/SlideOrientation;Landroidx/compose/ui/Modifier;Landroidx/compose/runtime/Composer;II)V
+	public final fun Thumb-coD9juw (ZJLcom/revenuecat/purchases/slidetounlock/SlideToUnlockColors;Lcom/revenuecat/purchases/slidetounlock/SlideOrientation;Landroidx/compose/ui/Modifier;Landroidx/compose/runtime/Composer;II)V
 	public final fun getPaddings-D9Ej5fM ()F
 	public final fun getThumbSize-D9Ej5fM ()F
 	public final fun getVelocityThreshold-D9Ej5fM ()F
 }
 
 public final class com/revenuecat/purchases/slidetounlock/SlideToUnlockKt {
-	public static final fun SlideToUnlock-lbUUqPM (ZLkotlin/jvm/functions/Function0;Landroidx/compose/ui/Modifier;Lcom/revenuecat/purchases/slidetounlock/SlideToUnlockColors;Lcom/revenuecat/purchases/slidetounlock/HintTexts;Landroidx/compose/ui/graphics/Shape;JFLandroidx/compose/foundation/layout/PaddingValues;Landroidx/compose/foundation/layout/PaddingValues;Lkotlin/jvm/functions/Function1;Lkotlin/jvm/functions/Function7;Lkotlin/jvm/functions/Function8;Landroidx/compose/runtime/Composer;III)V
+	public static final fun SlideToUnlock-PVngBv4 (ZLkotlin/jvm/functions/Function0;Landroidx/compose/ui/Modifier;Lcom/revenuecat/purchases/slidetounlock/SlideToUnlockColors;Lcom/revenuecat/purchases/slidetounlock/HintTexts;Landroidx/compose/ui/graphics/Shape;JFLandroidx/compose/foundation/layout/PaddingValues;Landroidx/compose/foundation/layout/PaddingValues;Lkotlin/jvm/functions/Function1;Lcom/revenuecat/purchases/slidetounlock/SlideOrientation;Lkotlin/jvm/functions/Function8;Lkotlin/jvm/functions/Function9;Landroidx/compose/runtime/Composer;III)V
 }
 

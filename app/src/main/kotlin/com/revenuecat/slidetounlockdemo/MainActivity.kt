@@ -32,8 +32,10 @@ import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.calculateStartPadding
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
+import androidx.compose.foundation.layout.heightIn
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
+import androidx.compose.foundation.layout.width
 import androidx.compose.foundation.shape.CircleShape
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material.icons.Icons
@@ -56,6 +58,7 @@ import androidx.compose.ui.draw.rotate
 import androidx.compose.ui.graphics.Brush
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.graphics.lerp
+import androidx.compose.ui.layout.onGloballyPositioned
 import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.platform.LocalLayoutDirection
 import androidx.compose.ui.res.painterResource
@@ -65,6 +68,7 @@ import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import com.revenuecat.purchases.slidetounlock.DefaultSlideToUnlockColors
 import com.revenuecat.purchases.slidetounlock.HintTexts
+import com.revenuecat.purchases.slidetounlock.SlideOrientation
 import com.revenuecat.purchases.slidetounlock.SlideToUnlock
 import com.valentinilk.shimmer.shimmer
 import kotlinx.coroutines.delay
@@ -91,6 +95,8 @@ class MainActivity : ComponentActivity() {
           SlideToUnlockStyle3()
 
           SlideToUnlockStyle4()
+
+          SlideToUnlockStyle5()
         }
       }
     }
@@ -129,7 +135,8 @@ private fun SlideToUnlockStyle1() {
       slidedHintColor = Color.White,
     ),
     onSlideCompleted = { isSlided = true },
-    thumb = { slided, fraction, colors, size ->
+
+    thumb = { slided, fraction, colors, size, orientation ->
       Box(
         modifier = Modifier.size(size),
       ) {
@@ -142,16 +149,17 @@ private fun SlideToUnlockStyle1() {
         )
       }
     },
-    hint = { slided, fraction, hintTexts, colors, paddings ->
+
+    hint = { slided, fraction, hintTexts, colors, paddings, orientation ->
       val layoutDirection = LocalLayoutDirection.current
 
       AnimatedContent(
         modifier = Modifier
           .fillMaxWidth()
           .align(Alignment.Center),
-        targetState = isSlided,
-      ) { slided ->
-        if (!slided) {
+        targetState = slided,
+      ) { slidedState ->
+        if (!slidedState) {
           Text(
             modifier = Modifier
               .fillMaxWidth()
@@ -214,7 +222,7 @@ private fun SlideToUnlockStyle2() {
       isSlided = true
       Toast.makeText(context, "unlocked!", Toast.LENGTH_SHORT).show()
     },
-    thumb = { slided, fraction, colors, size ->
+    thumb = { slided, fraction, colors, size, orientation ->
       val colorStops = arrayOf(
         0.0f to Color.White,
         1f to colors.thumbColor(),
@@ -237,7 +245,7 @@ private fun SlideToUnlockStyle2() {
         )
       }
     },
-    hint = { slided, fraction, hintTexts, colors, paddings ->
+    hint = { slided, fraction, hintTexts, colors, paddings, orientation ->
       val layoutDirection = LocalLayoutDirection.current
       Crossfade(
         modifier = Modifier
@@ -295,7 +303,7 @@ private fun SlideToUnlockStyle3() {
     ),
     colors = colors,
     onSlideCompleted = { isSlided = true },
-    thumb = { slided, fraction, colors, size ->
+    thumb = { slided, fraction, colors, size, orientation ->
       Box(
         modifier = Modifier
           .size(size)
@@ -329,7 +337,7 @@ private fun SlideToUnlockStyle3() {
         }
       }
     },
-    hint = { slided, fraction, hintTexts, colors, paddings ->
+    hint = { slided, fraction, hintTexts, colors, paddings, orientation ->
       val layoutDirection = LocalLayoutDirection.current
 
       AnimatedContent(
@@ -411,7 +419,7 @@ private fun SlideToUnlockStyle4() {
     ),
     colors = colors,
     onSlideCompleted = { isSlided = true },
-    thumb = { slided, fraction, colors, size ->
+    thumb = { slided, fraction, colors, size, orientation ->
       Box(
         modifier = Modifier
           .size(size)
@@ -445,7 +453,7 @@ private fun SlideToUnlockStyle4() {
         }
       }
     },
-    hint = { slided, fraction, hintTexts, colors, paddings ->
+    hint = { slided, fraction, hintTexts, colors, paddings, orientation ->
       val layoutDirection = LocalLayoutDirection.current
 
       AnimatedContent(
@@ -488,4 +496,129 @@ private fun SlideToUnlockStyle4() {
       }
     },
   )
+}
+
+@Composable
+private fun SlideToUnlockStyle5() {
+  var isSlided by remember { mutableStateOf(false) }
+  var isCompleted by remember { mutableStateOf(false) }
+  val animateColor: Float by animateFloatAsState(
+    if (isCompleted) 1f else 0f,
+    label = "alpha",
+    animationSpec = tween(durationMillis = 700),
+  )
+  val colors = if (isCompleted) {
+    DefaultSlideToUnlockColors(
+      endTrackColor = lerp(Color(0xFFB4AFB4), Color(0xFFC91224), animateColor),
+      slidedHintColor = Color.White,
+      thumbIconColor = Color(0xFFC91224),
+    )
+  } else {
+    DefaultSlideToUnlockColors(
+      endTrackColor = Color(0xFFB4AFB4),
+      slidedHintColor = Color.White,
+    )
+  }
+
+  LaunchedEffect(isSlided) {
+    if (isSlided) {
+      delay(1500)
+      isCompleted = true
+    }
+  }
+
+  SlideToUnlock(
+    isSlided = isSlided,
+    hintTexts = HintTexts.defaultHintTexts().copy(
+      defaultText = "Hi",
+      slidedText = "Hello",
+    ),
+    colors = colors,
+    onSlideCompleted = { isSlided = true },
+    orientation = SlideOrientation.Vertical,
+    thumb = { slided, fraction, colors, size, orientation ->
+      Box(
+        modifier = Modifier
+          .size(size)
+          .background(color = colors.thumbColor(), shape = CircleShape),
+        contentAlignment = Alignment.Center,
+      ) {
+        if (isCompleted) {
+          Icon(
+            modifier = Modifier
+              .align(Alignment.Center)
+              .size(30.dp),
+            imageVector = Icons.Default.Error,
+            tint = colors.thumbIconColor(),
+            contentDescription = "Failed",
+          )
+        } else if (isSlided) {
+          CircularProgressIndicator(
+            modifier = Modifier.padding(8.dp),
+            color = colors.progressColor(),
+            strokeWidth = 3.dp,
+          )
+        } else {
+          Icon(
+            modifier = Modifier
+              .align(Alignment.Center)
+              .size(30.dp)
+              .rotate(fraction * -360),
+            imageVector = Icons.Default.Restore,
+            tint = colors.thumbIconColor(),
+            contentDescription = "Slide to unlock",
+          )
+        }
+      }
+    },
+    hint = { slided, fraction, hintTexts, colors, paddings, orientation ->
+
+      AnimatedContent(
+        modifier = Modifier
+          .align(Alignment.Center)
+          .onGloballyPositioned {},
+        targetState = isSlided,
+      ) { slided ->
+        if (isCompleted) {
+          StackedVerticalText(
+            text = "Failed: Check out your account",
+            textColor = colors.slidedHintColor(),
+          )
+        } else if (!slided) {
+          StackedVerticalText(
+            text = hintTexts.defaultText,
+            textColor = colors.hintColor(fraction),
+          )
+        } else {
+          StackedVerticalText(
+            text = hintTexts.slidedText,
+            textColor = colors.slidedHintColor(),
+          )
+        }
+      }
+    },
+  )
+}
+
+@Composable
+fun StackedVerticalText(
+  text: String,
+  modifier: Modifier = Modifier,
+  textColor: Color = Color.Black,
+) {
+  Column(
+    modifier = modifier
+      .heightIn(),
+    horizontalAlignment = Alignment.CenterHorizontally,
+    verticalArrangement = Arrangement.Center,
+  ) {
+    text.forEach { char ->
+      Text(
+        text = char.toString(),
+        textAlign = TextAlign.Center,
+        color = textColor,
+        style = MaterialTheme.typography.titleMedium,
+      )
+    }
+  }
 }
