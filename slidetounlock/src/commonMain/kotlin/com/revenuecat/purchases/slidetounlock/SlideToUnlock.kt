@@ -23,9 +23,11 @@ import androidx.compose.foundation.background
 import androidx.compose.foundation.gestures.Orientation
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.BoxScope
+import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.PaddingValues
 import androidx.compose.foundation.layout.calculateEndPadding
 import androidx.compose.foundation.layout.calculateStartPadding
+import androidx.compose.foundation.layout.fillMaxHeight
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.offset
 import androidx.compose.foundation.layout.padding
@@ -38,6 +40,7 @@ import androidx.compose.material.SwipeProgress
 import androidx.compose.material.SwipeableState
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.automirrored.filled.ArrowRight
+import androidx.compose.material.icons.filled.KeyboardArrowDown
 import androidx.compose.material.rememberSwipeableState
 import androidx.compose.material.swipeable
 import androidx.compose.material3.CircularProgressIndicator
@@ -74,22 +77,19 @@ import kotlin.math.roundToInt
 private enum class SlideToUnlockValue { Start, End }
 
 /**
- * A composable that provides a "slide to unlock" UI element.
+ * A fully customizable "slide-to-unlock" UI component for Jetpack Compose.
  *
- * This component displays a track with a draggable thumb. The user can slide the thumb
- * from the start to the end to trigger an action. The component supports a loading state
- * where the thumb is locked at the end and displays a progress indicator.
+ * Supports horizontal (default) and vertical orientations via [SlideOrientation].
  *
- * @param isSlided A boolean that indicates if the component should be in the loading state.
- * When true, the thumb is locked at the end and shows a progress indicator.
- * @param onSlideCompleted A lambda that is invoked when the user successfully slides the
- * thumb to the end.
- * @param modifier The [Modifier] to be applied to this component.
- * @param colors The [SlideToUnlockColors] used to customize the appearance of the component.
- * @param trackShape The [Shape] of the track.
- * @param onSlideFractionChanged A callback that will be invoked whenever the swipe fraction is changed.
- * @param thumb A composable lambda for the thumb that is dragged. By default, it uses [SlideToUnlockDefaults.Thumb].
- * @param hint A composable lambda for the hint text displayed on the track. By default, it uses [SlideToUnlockDefaults.Hint].
+ * @param isSlided Whether the slider has been completed and locked.
+ * @param onSlideCompleted Invoked when the user successfully completes the slide gesture.
+ * @param orientation The direction of the sliding gesture. Defaults to [SlideOrientation.Horizontal].
+ * @param onSlideFractionChanged Optional callback invoked with the current slide progress fraction (0f–1f).
+ * @param thumb A composable slot for customizing the draggable thumb.
+ * @param hint A composable slot for customizing the hint text or visuals inside the track.
+ * @param colors Provides the color scheme for the track, thumb, and hint. Defaults to [DefaultSlideToUnlockColors].
+ * @param hintTexts Provides the hint messages (default and slided states).
+ * @param modifier Modifier to be applied to the layout.
  */
 @Composable
 public fun SlideToUnlock(
@@ -100,19 +100,21 @@ public fun SlideToUnlock(
   hintTexts: HintTexts = HintTexts.defaultHintTexts(),
   trackShape: Shape = RoundedCornerShape(percent = 50),
   thumbSize: DpSize = DpSize(ThumbSize, ThumbSize),
-  factionalThreshold: Float = 0.85f,
+  fractionalThreshold: Float = 0.85f,
   paddings: PaddingValues = PaddingValues(SlideToUnlockDefaults.Paddings),
   hintPaddings: PaddingValues = PaddingValues(start = thumbSize.width, end = thumbSize.width),
   onSlideFractionChanged: (Float) -> Unit = {},
-  thumb: @Composable BoxScope.(isSlided: Boolean, slideFraction: Float, colors: SlideToUnlockColors, size: DpSize) -> Unit = { slided, _, _, size ->
+  orientation: SlideOrientation = SlideOrientation.Horizontal,
+  thumb: @Composable BoxScope.(isSlided: Boolean, slideFraction: Float, colors: SlideToUnlockColors, size: DpSize, orientation: SlideOrientation) -> Unit = { slided, _, _, size, orient ->
     SlideToUnlockDefaults.Thumb(
       modifier = Modifier.size(thumbSize),
       isSlided = slided,
       colors = colors,
       thumbSize = thumbSize,
+      orientation = orient,
     )
   },
-  hint: @Composable BoxScope.(isSlided: Boolean, slideFraction: Float, hintTexts: HintTexts, colors: SlideToUnlockColors, paddings: PaddingValues) -> Unit = { slided, fraction, _, _, paddings ->
+  hint: @Composable BoxScope.(isSlided: Boolean, slideFraction: Float, hintTexts: HintTexts, colors: SlideToUnlockColors, paddings: PaddingValues, orientation: SlideOrientation) -> Unit = { slided, fraction, _, _, paddings, orient ->
     SlideToUnlockDefaults.Hint(
       modifier = Modifier.align(Alignment.Center),
       slideFraction = fraction,
@@ -120,6 +122,7 @@ public fun SlideToUnlock(
       isSlided = slided,
       colors = colors,
       paddingValues = hintPaddings,
+      orientation = orient,
     )
   },
 ) {
@@ -156,7 +159,8 @@ public fun SlideToUnlock(
     trackShape = trackShape,
     thumbSize = thumbSize,
     paddingValues = paddings,
-    factionalThreshold = factionalThreshold,
+    factionalThreshold = fractionalThreshold,
+    orientation = orientation,
   ) {
     hint(
       isSlided,
@@ -164,14 +168,18 @@ public fun SlideToUnlock(
       hintTexts,
       colors,
       hintPaddings,
+      orientation,
     )
 
     Box(
       modifier = Modifier.offset {
-        IntOffset(swipeState.offset.value.roundToInt(), 0)
+        when (orientation) {
+          SlideOrientation.Horizontal -> IntOffset(swipeState.offset.value.roundToInt(), 0)
+          SlideOrientation.Vertical -> IntOffset(0, swipeState.offset.value.roundToInt())
+        }
       },
     ) {
-      thumb(isSlided, slideFraction, colors, thumbSize)
+      thumb(isSlided, slideFraction, colors, thumbSize, orientation)
     }
   }
 }
@@ -204,6 +212,7 @@ private fun SlideToUnlockTrack(
   factionalThreshold: Float,
   thumbSize: DpSize,
   paddingValues: PaddingValues,
+  orientation: SlideOrientation,
   content: @Composable BoxScope.() -> Unit,
 ) {
   val density = LocalDensity.current
@@ -213,18 +222,37 @@ private fun SlideToUnlockTrack(
 
   val startOfTrackPx = 0f
   var measuredWidth by remember { mutableIntStateOf(0) }
-  val endOfTrackPx = remember(measuredWidth) {
+  var measuredHeight by remember { mutableIntStateOf(0) }
+
+  val endOfTrackPx = remember(measuredWidth, measuredHeight, orientation) {
     with(density) {
-      val totalPadding = paddingValues.calculateStartPadding(layoutDirection) +
-        paddingValues.calculateEndPadding(layoutDirection)
-      measuredWidth - (totalPadding + thumbSize.width).toPx()
+      when (orientation) {
+        SlideOrientation.Horizontal -> {
+          val totalPadding = paddingValues.calculateStartPadding(layoutDirection) +
+            paddingValues.calculateEndPadding(layoutDirection)
+          measuredWidth - (totalPadding + thumbSize.width).toPx()
+        }
+        SlideOrientation.Vertical -> {
+          val totalPadding = paddingValues.calculateTopPadding() +
+            paddingValues.calculateBottomPadding()
+          measuredHeight - (totalPadding + thumbSize.height).toPx()
+        }
+      }
     }
   }
 
   Box(
     modifier = modifier
-      .fillMaxWidth()
-      .onSizeChanged { measuredWidth = it.width }
+      .run {
+        when (orientation) {
+          SlideOrientation.Horizontal -> fillMaxWidth()
+          SlideOrientation.Vertical -> fillMaxHeight()
+        }
+      }
+      .onSizeChanged {
+        measuredWidth = it.width
+        measuredHeight = it.height
+      }
       .run {
         if (trackBrush != null) {
           background(
@@ -242,7 +270,10 @@ private fun SlideToUnlockTrack(
       .swipeable(
         enabled = enabled,
         state = swipeState,
-        orientation = Orientation.Horizontal,
+        orientation = when (orientation) {
+          SlideOrientation.Horizontal -> Orientation.Horizontal
+          SlideOrientation.Vertical -> Orientation.Vertical
+        },
         anchors = mapOf(
           startOfTrackPx to SlideToUnlockValue.Start,
           endOfTrackPx to SlideToUnlockValue.End,
@@ -267,6 +298,7 @@ public object SlideToUnlockDefaults {
    *
    * @param isSlided Whether the component is in the loading state.
    * @param colors The [SlideToUnlockColors] used to customize the appearance of the component.
+   * @param orientation The slide orientation.
    * @param modifier The modifier to be applied to the thumb.
    */
   @Composable
@@ -274,12 +306,14 @@ public object SlideToUnlockDefaults {
     isSlided: Boolean,
     thumbSize: DpSize,
     colors: SlideToUnlockColors = DefaultSlideToUnlockColors(),
+    orientation: SlideOrientation = SlideOrientation.Horizontal,
     modifier: Modifier = Modifier,
   ) {
     Box(
       modifier = modifier
         .size(thumbSize)
         .background(color = colors.thumbColor(), shape = CircleShape),
+      contentAlignment = Alignment.Center,
     ) {
       if (isSlided) {
         CircularProgressIndicator(
@@ -290,9 +324,15 @@ public object SlideToUnlockDefaults {
       } else {
         Icon(
           modifier = Modifier.align(Alignment.Center).size(40.dp),
-          imageVector = Icons.AutoMirrored.Filled.ArrowRight,
+          imageVector = when (orientation) {
+            SlideOrientation.Horizontal -> Icons.AutoMirrored.Filled.ArrowRight
+            SlideOrientation.Vertical -> Icons.Filled.KeyboardArrowDown
+          },
           tint = colors.thumbIconColor(),
-          contentDescription = "Slide to unlock",
+          contentDescription = when (orientation) {
+            SlideOrientation.Horizontal -> "Slide to unlock"
+            SlideOrientation.Vertical -> "Slide down to unlock"
+          },
         )
       }
     }
@@ -302,6 +342,7 @@ public object SlideToUnlockDefaults {
    * The default hint composable for the [SlideToUnlock] component.
    *
    * @param slideFraction The current progress of the swipe, from 0.0f to 1.0f.
+   * @param orientation The slide orientation.
    * @param modifier The modifier to be applied to the hint.
    */
   @Composable
@@ -311,32 +352,80 @@ public object SlideToUnlockDefaults {
     slideFraction: Float,
     colors: SlideToUnlockColors,
     paddingValues: PaddingValues,
+    orientation: SlideOrientation = SlideOrientation.Horizontal,
     modifier: Modifier = Modifier,
   ) {
     val layoutDirection = LocalLayoutDirection.current
 
-    AnimatedContent(modifier = modifier.fillMaxWidth(), targetState = isSlided) { slided ->
+    AnimatedContent(
+      modifier = modifier.run {
+        when (orientation) {
+          SlideOrientation.Horizontal -> fillMaxWidth()
+          SlideOrientation.Vertical -> fillMaxHeight()
+        }
+      },
+      targetState = isSlided,
+    ) { slided ->
       if (!slided) {
-        Text(
-          modifier = Modifier.fillMaxWidth().padding(
-            start = paddingValues.calculateStartPadding(
-              layoutDirection,
-            ),
-          ),
-          text = hintTexts.defaultText,
-          textAlign = TextAlign.Center,
-          color = colors.hintColor(slideFraction),
-          style = MaterialTheme.typography.titleMedium,
-        )
+        when (orientation) {
+          SlideOrientation.Horizontal -> {
+            Text(
+              modifier = Modifier.fillMaxWidth().padding(
+                start = paddingValues.calculateStartPadding(layoutDirection),
+              ),
+              text = hintTexts.defaultText,
+              textAlign = TextAlign.Center,
+              color = colors.hintColor(slideFraction),
+              style = MaterialTheme.typography.titleMedium,
+            )
+          }
+          SlideOrientation.Vertical -> {
+            Column(
+              modifier = Modifier.fillMaxHeight().padding(
+                top = paddingValues.calculateTopPadding(),
+              ),
+              horizontalAlignment = Alignment.CenterHorizontally,
+            ) {
+              Text(
+                text = hintTexts.defaultText,
+                textAlign = TextAlign.Center,
+                color = colors.hintColor(slideFraction),
+                style = MaterialTheme.typography.titleMedium,
+              )
+            }
+          }
+        }
       } else {
-        Text(
-          modifier = Modifier.fillMaxWidth(),
-          text = hintTexts.slidedText,
-          textAlign = TextAlign.Center,
-          color = colors.slidedHintColor(),
-          style = MaterialTheme.typography.titleMedium,
-        )
+        when (orientation) {
+          SlideOrientation.Horizontal -> {
+            Text(
+              modifier = Modifier.fillMaxWidth(),
+              text = hintTexts.slidedText,
+              textAlign = TextAlign.Center,
+              color = colors.slidedHintColor(),
+              style = MaterialTheme.typography.titleMedium,
+            )
+          }
+          SlideOrientation.Vertical -> {
+            Column(
+              modifier = Modifier.fillMaxHeight(),
+              horizontalAlignment = Alignment.CenterHorizontally,
+            ) {
+              Text(
+                text = hintTexts.slidedText,
+                textAlign = TextAlign.Center,
+                color = colors.slidedHintColor(),
+                style = MaterialTheme.typography.titleMedium,
+              )
+            }
+          }
+        }
       }
     }
   }
+}
+
+public enum class SlideOrientation {
+  Horizontal,
+  Vertical,
 }

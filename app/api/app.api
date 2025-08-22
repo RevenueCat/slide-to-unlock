@@ -1,14 +1,19 @@
 public final class com/revenuecat/slidetounlockdemo/ComposableSingletons$MainActivityKt {
 	public static final field INSTANCE Lcom/revenuecat/slidetounlockdemo/ComposableSingletons$MainActivityKt;
 	public fun <init> ()V
+	public final fun getLambda$-238258827$app_release ()Lkotlin/jvm/functions/Function9;
+	public final fun getLambda$-55614235$app_release ()Lkotlin/jvm/functions/Function8;
 	public final fun getLambda$-794938742$app_release ()Lkotlin/jvm/functions/Function2;
-	public final fun getLambda$136809679$app_release ()Lkotlin/jvm/functions/Function7;
-	public final fun getLambda$1441203408$app_release ()Lkotlin/jvm/functions/Function7;
+	public final fun getLambda$1248779494$app_release ()Lkotlin/jvm/functions/Function8;
 	public final fun getLambda$1783585206$app_release ()Lkotlin/jvm/functions/Function2;
 }
 
 public final class com/revenuecat/slidetounlockdemo/MainActivity : androidx/activity/ComponentActivity {
 	public static final field $stable I
 	public fun <init> ()V
+}
+
+public final class com/revenuecat/slidetounlockdemo/MainActivityKt {
+	public static final fun StackedVerticalText-FNF3uiM (Ljava/lang/String;Landroidx/compose/ui/Modifier;JLandroidx/compose/runtime/Composer;II)V
 }
 
