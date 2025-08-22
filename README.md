@@ -39,7 +39,7 @@ slidetounlock = "1.0.0"
 
 [libraries]
 #...
-compose-slidetounlock = { module = "com.revenuecat.purchases:slidetounlock", version.ref = "slidetounlock" }
+compose-slidetounlock = { module = "com.revenuecat.purchases:slide-to-unlock", version.ref = "slidetounlock" }
 ```
 
 ### Gradle
@@ -48,7 +48,7 @@ Add the dependency below to your **module**'s `build.gradle.kts` file:
 
 ```gradle
 dependencies {
-    implementation("com.revenuecat.purchases:slidetounlock:$version")
+    implementation("com.revenuecat.purchases:slide-to-unlock:$version")
     
     // if you're using Version Catalog
     implementation(libs.compose.slidetounlock)
@@ -369,7 +369,7 @@ slidetounlockPurchases = "1.0.0"
 
 [libraries]
 #...
-compose-slidetounlock-purchases = { module = "com.revenuecat.purchases:slidetounlock-purchases", version.ref = "slidetounlockPurchases" }
+compose-slidetounlock-purchases = { module = "com.revenuecat.purchases:slide-to-unlock-purchases", version.ref = "slidetounlockPurchases" }
 ```
 
 ### Gradle
@@ -378,7 +378,7 @@ Add the dependency below to your **module**'s `build.gradle.kts` file:
 
 ```gradle
 dependencies {
-    implementation("com.revenuecat.purchases:slidetounlock-purchases:$version")
+    implementation("com.revenuecat.purchases:slide-to-unlock-purchases:$version")
     
     // if you're using Version Catalog
     implementation(libs.compose.slidetounlock.purchases)
