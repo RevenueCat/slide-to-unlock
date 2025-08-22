@@ -1,0 +1,7 @@
+$dokka.format:html-v1
+$dokka.linkExtension:html
+
+module:slidetounlock
+com.revenuecat.purchases.slidetounlock
+module:slidetounlock-purchases
+com.revenuecat.purchases.slidetounlock.purchases
