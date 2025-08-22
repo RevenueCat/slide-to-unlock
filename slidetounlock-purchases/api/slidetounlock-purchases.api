@@ -1,0 +1,46 @@
+public abstract class com/revenuecat/slidetounlock/purchases/PurchaseState {
+	public static final field $stable I
+}
+
+public final class com/revenuecat/slidetounlock/purchases/PurchaseState$Error : com/revenuecat/slidetounlock/purchases/PurchaseState {
+	public static final field $stable I
+	public fun <init> (Ljava/lang/Exception;)V
+	public final fun component1 ()Ljava/lang/Exception;
+	public final fun copy (Ljava/lang/Exception;)Lcom/revenuecat/slidetounlock/purchases/PurchaseState$Error;
+	public static synthetic fun copy$default (Lcom/revenuecat/slidetounlock/purchases/PurchaseState$Error;Ljava/lang/Exception;ILjava/lang/Object;)Lcom/revenuecat/slidetounlock/purchases/PurchaseState$Error;
+	public fun equals (Ljava/lang/Object;)Z
+	public final fun getException ()Ljava/lang/Exception;
+	public fun hashCode ()I
+	public fun toString ()Ljava/lang/String;
+}
+
+public final class com/revenuecat/slidetounlock/purchases/PurchaseState$Loading : com/revenuecat/slidetounlock/purchases/PurchaseState {
+	public static final field $stable I
+	public static final field INSTANCE Lcom/revenuecat/slidetounlock/purchases/PurchaseState$Loading;
+	public fun equals (Ljava/lang/Object;)Z
+	public fun hashCode ()I
+	public fun toString ()Ljava/lang/String;
+}
+
+public final class com/revenuecat/slidetounlock/purchases/PurchaseState$Success : com/revenuecat/slidetounlock/purchases/PurchaseState {
+	public static final field $stable I
+	public fun <init> (Lcom/revenuecat/purchases/kmp/ktx/SuccessfulPurchase;)V
+	public final fun component1 ()Lcom/revenuecat/purchases/kmp/ktx/SuccessfulPurchase;
+	public final fun copy (Lcom/revenuecat/purchases/kmp/ktx/SuccessfulPurchase;)Lcom/revenuecat/slidetounlock/purchases/PurchaseState$Success;
+	public static synthetic fun copy$default (Lcom/revenuecat/slidetounlock/purchases/PurchaseState$Success;Lcom/revenuecat/purchases/kmp/ktx/SuccessfulPurchase;ILjava/lang/Object;)Lcom/revenuecat/slidetounlock/purchases/PurchaseState$Success;
+	public fun equals (Ljava/lang/Object;)Z
+	public final fun getSuccessfulPurchase ()Lcom/revenuecat/purchases/kmp/ktx/SuccessfulPurchase;
+	public fun hashCode ()I
+	public fun toString ()Ljava/lang/String;
+}
+
+public final class com/revenuecat/slidetounlock/purchases/SlideToPurchasesKt {
+	public static final fun SlideToPurchases (Lcom/revenuecat/purchases/kmp/models/Package;Landroidx/compose/ui/Modifier;Lcom/revenuecat/slidetounlock/SlideToUnlockColors;Lcom/revenuecat/slidetounlock/HintTexts;Lkotlin/jvm/functions/Function0;Lkotlin/jvm/functions/Function1;Ljava/lang/Boolean;Ljava/lang/String;Lcom/revenuecat/purchases/kmp/models/GoogleReplacementMode;Landroidx/compose/runtime/Composer;II)V
+	public static final fun SlideToPurchases (Lcom/revenuecat/purchases/kmp/models/Package;Lcom/revenuecat/purchases/kmp/models/PromotionalOffer;Landroidx/compose/ui/Modifier;Lcom/revenuecat/slidetounlock/SlideToUnlockColors;Lcom/revenuecat/slidetounlock/HintTexts;Lkotlin/jvm/functions/Function0;Lkotlin/jvm/functions/Function1;Landroidx/compose/runtime/Composer;II)V
+	public static final fun SlideToPurchases (Lcom/revenuecat/purchases/kmp/models/Package;Lcom/revenuecat/purchases/kmp/models/WinBackOffer;Landroidx/compose/ui/Modifier;Lcom/revenuecat/slidetounlock/SlideToUnlockColors;Lcom/revenuecat/slidetounlock/HintTexts;Lkotlin/jvm/functions/Function0;Lkotlin/jvm/functions/Function1;Landroidx/compose/runtime/Composer;II)V
+	public static final fun SlideToPurchases (Lcom/revenuecat/purchases/kmp/models/StoreProduct;Landroidx/compose/ui/Modifier;Lcom/revenuecat/slidetounlock/SlideToUnlockColors;Lcom/revenuecat/slidetounlock/HintTexts;Lkotlin/jvm/functions/Function0;Lkotlin/jvm/functions/Function1;Ljava/lang/Boolean;Ljava/lang/String;Lcom/revenuecat/purchases/kmp/models/GoogleReplacementMode;Landroidx/compose/runtime/Composer;II)V
+	public static final fun SlideToPurchases (Lcom/revenuecat/purchases/kmp/models/StoreProduct;Lcom/revenuecat/purchases/kmp/models/PromotionalOffer;Landroidx/compose/ui/Modifier;Lcom/revenuecat/slidetounlock/SlideToUnlockColors;Lcom/revenuecat/slidetounlock/HintTexts;Lkotlin/jvm/functions/Function0;Lkotlin/jvm/functions/Function1;Landroidx/compose/runtime/Composer;II)V
+	public static final fun SlideToPurchases (Lcom/revenuecat/purchases/kmp/models/StoreProduct;Lcom/revenuecat/purchases/kmp/models/WinBackOffer;Landroidx/compose/ui/Modifier;Lcom/revenuecat/slidetounlock/SlideToUnlockColors;Lcom/revenuecat/slidetounlock/HintTexts;Lkotlin/jvm/functions/Function0;Lkotlin/jvm/functions/Function1;Landroidx/compose/runtime/Composer;II)V
+	public static final fun SlideToPurchases (Lcom/revenuecat/purchases/kmp/models/SubscriptionOption;Landroidx/compose/ui/Modifier;Lcom/revenuecat/slidetounlock/SlideToUnlockColors;Lcom/revenuecat/slidetounlock/HintTexts;Lkotlin/jvm/functions/Function0;Lkotlin/jvm/functions/Function1;Ljava/lang/Boolean;Ljava/lang/String;Lcom/revenuecat/purchases/kmp/models/GoogleReplacementMode;Landroidx/compose/runtime/Composer;II)V
+}
+
