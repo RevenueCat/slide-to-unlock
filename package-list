@@ -1,6 +1,7 @@
 $dokka.format:html-v1
 $dokka.linkExtension:html
-
+$dokka.location:////PointingToDeclaration/slidetounlock-purchases/[root]/index.html
+$dokka.location://SlideToRestore/#androidx.compose.ui.Modifier#kotlin.Function1[com.revenuecat.purchases.slidetounlock.purchases.RestoreState,kotlin.Unit]#com.revenuecat.purchases.slidetounlock.SlideToUnlockColors#com.revenuecat.purchases.slidetounlock.HintTexts#androidx.compose.ui.graphics.Shape#androidx.compose.ui.unit.DpSize#kotlin.Float#androidx.compose.foundation.layout.PaddingValues#androidx.compose.foundation.layout.PaddingValues#kotlin.Function1[kotlin.Float,kotlin.Unit]#kotlin.Function0[kotlin.Unit]#com.revenuecat.purchases.slidetounlock.SlideOrientation#kotlin.Function6[androidx.compose.foundation.layout.BoxScope,kotlin.Boolean,kotlin.Float,com.revenuecat.purchases.slidetounlock.SlideToUnlockColors,androidx.compose.ui.unit.DpSize,com.revenuecat.purchases.slidetounlock.SlideOrientation,kotlin.Unit]#kotlin.Function7[androidx.compose.foundation.layout.BoxScope,kotlin.Boolean,kotlin.Float,com.revenuecat.purchases.slidetounlock.HintTexts,com.revenuecat.purchases.slidetounlock.SlideToUnlockColors,androidx.compose.foundation.layout.PaddingValues,com.revenuecat.purchases.slidetounlock.SlideOrientation,kotlin.Unit]/PointingToDeclaration/slidetounlock-purchases/[root]/-slide-to-restore.html
 module:slidetounlock
 com.revenuecat.purchases.slidetounlock
 module:slidetounlock-purchases

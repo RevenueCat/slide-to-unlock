@@ -1,0 +1,132 @@
+<!doctype html>
+<html class="no-js">
+<head>
+    <meta name="viewport" content="width=device-width, initial-scale=1" charset="UTF-8">
+    <title>SlideToRestore</title>
+<link href="../../images/logo-icon.svg" rel="icon" type="image/svg">    <script>var pathToRoot = "../../";</script>
+    <script>document.documentElement.classList.replace("no-js","js");</script>
+    <script>const storage = localStorage.getItem("dokka-dark-mode")
+    if (storage == null) {
+        const osDarkSchemePreferred = window.matchMedia && window.matchMedia('(prefers-color-scheme: dark)').matches
+        if (osDarkSchemePreferred === true) {
+            document.getElementsByTagName("html")[0].classList.add("theme-dark")
+        }
+    } else {
+        const savedDarkMode = JSON.parse(storage)
+        if(savedDarkMode === true) {
+            document.getElementsByTagName("html")[0].classList.add("theme-dark")
+        }
+    }
+    </script>
+<script type="text/javascript" src="https://unpkg.com/kotlin-playground@1/dist/playground.min.js" async></script>
+<script type="text/javascript" src="../../scripts/sourceset_dependencies.js" async></script>
+<link href="../../styles/style.css" rel="Stylesheet">
+<link href="../../styles/main.css" rel="Stylesheet">
+<link href="../../styles/prism.css" rel="Stylesheet">
+<link href="../../styles/logo-styles.css" rel="Stylesheet">
+<link href="../../styles/font-jb-sans-auto.css" rel="Stylesheet">
+<link href="../../ui-kit/ui-kit.min.css" rel="Stylesheet">
+<script type="text/javascript" src="../../scripts/clipboard.js" async></script>
+<script type="text/javascript" src="../../scripts/navigation-loader.js" async></script>
+<script type="text/javascript" src="../../scripts/platform-content-handler.js" async></script>
+<script type="text/javascript" src="../../scripts/main.js" defer></script>
+<script type="text/javascript" src="../../scripts/prism.js" async></script>
+<script type="text/javascript" src="../../ui-kit/ui-kit.min.js" defer></script>
+<script type="text/javascript" src="../../scripts/symbol-parameters-wrapper_deferred.js" defer></script></head>
+<body>
+    <div class="root">
+    <nav class="navigation theme-dark" id="navigation-wrapper">
+<a class="library-name--link" href="../../index.html">
+                    slidetounlockdemo
+            </a>        <button class="navigation-controls--btn navigation-controls--btn_toc ui-kit_mobile-only" id="toc-toggle" type="button">Toggle table of contents
+        </button>
+        <div class="navigation-controls--break ui-kit_mobile-only"></div>
+        <div class="library-version" id="library-version">
+        </div>
+        <div class="navigation-controls">
+        <div class="filter-section filter-section_loading" id="filter-section">
+                <button class="platform-tag platform-selector common-like" data-active="" data-filter=":slidetounlock-purchases:dokkaHtmlPartial/commonMain">common</button>
+            <div class="dropdown filter-section--dropdown" data-role="dropdown" id="filter-section-dropdown">
+                <button class="button button_dropdown filter-section--dropdown-toggle" role="combobox" data-role="dropdown-toggle" aria-controls="platform-tags-listbox" aria-haspopup="listbox" aria-expanded="false" aria-label="Toggle source sets"></button>
+                <ul role="listbox" id="platform-tags-listbox" class="dropdown--list" data-role="dropdown-listbox">
+                    <div class="dropdown--header"><span>Platform filter</span>
+                        <button class="button" data-role="dropdown-toggle" aria-label="Close platform filter">
+                            <i class="ui-kit-icon ui-kit-icon_cross"></i>
+                        </button>
+                    </div>
+                        <li role="option" class="dropdown--option platform-selector-option common-like" tabindex="0">
+                            <label class="checkbox">
+                                <input type="checkbox" class="checkbox--input" id=":slidetounlock-purchases:dokkaHtmlPartial/commonMain" data-filter=":slidetounlock-purchases:dokkaHtmlPartial/commonMain">
+                                <span class="checkbox--icon"></span>
+                                common
+                            </label>
+                        </li>
+                </ul>
+                <div class="dropdown--overlay"></div>
+            </div>
+        </div>
+            <button class="navigation-controls--btn navigation-controls--btn_theme" id="theme-toggle-button" type="button">Switch theme
+            </button>
+            <div class="navigation-controls--btn navigation-controls--btn_search" id="searchBar" role="button">Search in
+                API
+            </div>
+        </div>
+    </nav>
+        <div id="container">
+            <div class="sidebar" id="leftColumn">
+                <div class="dropdown theme-dark_mobile" data-role="dropdown" id="toc-dropdown">
+                    <ul role="listbox" id="toc-listbox" class="dropdown--list dropdown--list_toc-list" data-role="dropdown-listbox">
+                        <div class="dropdown--header">
+                            <span>
+                                    slidetounlockdemo
+                            </span>
+                            <button class="button" data-role="dropdown-toggle" aria-label="Close table of contents">
+                                <i class="ui-kit-icon ui-kit-icon_cross"></i>
+                            </button>
+                        </div>
+                        <div class="sidebar--inner" id="sideMenu"></div>
+                    </ul>
+                    <div class="dropdown--overlay"></div>
+                </div>
+            </div>
+            <div id="main">
+<div class="main-content" data-page-type="member" id="content" pageids="slidetounlock-purchases:://SlideToRestore/#androidx.compose.ui.Modifier#kotlin.Function1[com.revenuecat.purchases.slidetounlock.purchases.RestoreState,kotlin.Unit]#com.revenuecat.purchases.slidetounlock.SlideToUnlockColors#com.revenuecat.purchases.slidetounlock.HintTexts#androidx.compose.ui.graphics.Shape#androidx.compose.ui.unit.DpSize#kotlin.Float#androidx.compose.foundation.layout.PaddingValues#androidx.compose.foundation.layout.PaddingValues#kotlin.Function1[kotlin.Float,kotlin.Unit]#kotlin.Function0[kotlin.Unit]#com.revenuecat.purchases.slidetounlock.SlideOrientation#kotlin.Function6[androidx.compose.foundation.layout.BoxScope,kotlin.Boolean,kotlin.Float,com.revenuecat.purchases.slidetounlock.SlideToUnlockColors,androidx.compose.ui.unit.DpSize,com.revenuecat.purchases.slidetounlock.SlideOrientation,kotlin.Unit]#kotlin.Function7[androidx.compose.foundation.layout.BoxScope,kotlin.Boolean,kotlin.Float,com.revenuecat.purchases.slidetounlock.HintTexts,com.revenuecat.purchases.slidetounlock.SlideToUnlockColors,androidx.compose.foundation.layout.PaddingValues,com.revenuecat.purchases.slidetounlock.SlideOrientation,kotlin.Unit]/PointingToDeclaration//923899984">
+  <div class="breadcrumbs"><a href="../index.html">slidetounlock-purchases</a><span class="delimiter">/</span><a href="index.html">[root]</a><span class="delimiter">/</span><span class="current">SlideToRestore</span></div>
+  <div class="cover ">
+    <h1 class="cover"><span>Slide</span><wbr><span>To</span><wbr><span><span>Restore</span></span></h1>
+  </div>
+  <div class="platform-hinted " data-platform-hinted="data-platform-hinted"><div class="content sourceset-dependent-content" data-active="" data-togglable=":slidetounlock-purchases:dokkaHtmlPartial/commonMain"><div class="symbol monospace"><div class="block"><div class="block"><span class="token annotation builtin">@</span><a href="https://developer.android.com/reference/kotlin/androidx/compose/runtime/Composable.html"><span class="token annotation builtin">Composable</span></a></div></div><span class="token keyword">fun </span><a href="-slide-to-restore.html"><span class="token function">SlideToRestore</span></a><span class="token punctuation">(</span><span class="parameters "><span class="parameter ">modifier<span class="token operator">: </span><a href="https://developer.android.com/reference/kotlin/androidx/compose/ui/Modifier.html">Modifier</a><span class="token operator"> = </span>Modifier<span class="token punctuation">, </span></span><span class="parameter ">onRestoreStateChanged<span class="token operator">: </span><span class="token punctuation">(</span><a href="../com.revenuecat.purchases.slidetounlock.purchases/-restore-state/index.html">RestoreState</a><span class="token punctuation">)</span><span class="token operator"> -&gt; </span><a href="https://kotlinlang.org/api/core/kotlin-stdlib/kotlin/-unit/index.html">Unit</a><span class="token operator"> = </span>{}<span class="token punctuation">, </span></span><span class="parameter ">colors<span class="token operator">: </span><a href="../../slidetounlock/com.revenuecat.purchases.slidetounlock/-slide-to-unlock-colors/index.html">SlideToUnlockColors</a><span class="token operator"> = </span>DefaultSlideToUnlockColors()<span class="token punctuation">, </span></span><span class="parameter ">hintTexts<span class="token operator">: </span><a href="../../slidetounlock/com.revenuecat.purchases.slidetounlock/-hint-texts/index.html">HintTexts</a><span class="token operator"> = </span>HintTexts.defaultHintTexts().copy(defaultText = "Slide to restore")<span class="token punctuation">, </span></span><span class="parameter ">trackShape<span class="token operator">: </span><a href="https://developer.android.com/reference/kotlin/androidx/compose/ui/graphics/Shape.html">Shape</a><span class="token operator"> = </span>RoundedCornerShape(percent = 50)<span class="token punctuation">, </span></span><span class="parameter ">thumbSize<span class="token operator">: </span><a href="https://developer.android.com/reference/kotlin/androidx/compose/ui/unit/DpSize.html">DpSize</a><span class="token operator"> = </span>DpSize(ThumbSize, ThumbSize)<span class="token punctuation">, </span></span><span class="parameter ">fractionalThreshold<span class="token operator">: </span><a href="https://kotlinlang.org/api/core/kotlin-stdlib/kotlin/-float/index.html">Float</a><span class="token operator"> = </span><span class="token constant">0.85f</span><span class="token punctuation">, </span></span><span class="parameter ">paddings<span class="token operator">: </span><a href="https://developer.android.com/reference/kotlin/androidx/compose/foundation/layout/PaddingValues.html">PaddingValues</a><span class="token operator"> = </span>PaddingValues(SlideToUnlockDefaults.Paddings)<span class="token punctuation">, </span></span><span class="parameter ">hintPaddings<span class="token operator">: </span><a href="https://developer.android.com/reference/kotlin/androidx/compose/foundation/layout/PaddingValues.html">PaddingValues</a><span class="token operator"> = </span>PaddingValues(start = thumbSize.width, end = thumbSize.width)<span class="token punctuation">, </span></span><span class="parameter ">onSlideFractionChanged<span class="token operator">: </span><span class="token punctuation">(</span><a href="https://kotlinlang.org/api/core/kotlin-stdlib/kotlin/-float/index.html">Float</a><span class="token punctuation">)</span><span class="token operator"> -&gt; </span><a href="https://kotlinlang.org/api/core/kotlin-stdlib/kotlin/-unit/index.html">Unit</a><span class="token operator"> = </span>{}<span class="token punctuation">, </span></span><span class="parameter ">onSlideCompleted<span class="token operator">: </span><span class="token punctuation">(</span><span class="token punctuation">)</span><span class="token operator"> -&gt; </span><a href="https://kotlinlang.org/api/core/kotlin-stdlib/kotlin/-unit/index.html">Unit</a><span class="token operator"> = </span>{}<span class="token punctuation">, </span></span><span class="parameter ">orientation<span class="token operator">: </span><a href="../../slidetounlock/com.revenuecat.purchases.slidetounlock/-slide-orientation/index.html">SlideOrientation</a><span class="token operator"> = </span>SlideOrientation.Horizontal<span class="token punctuation">, </span></span><span class="parameter ">thumb<span class="token operator">: </span><span><span class="token annotation builtin">@</span><a href="https://developer.android.com/reference/kotlin/androidx/compose/runtime/Composable.html"><span class="token annotation builtin">Composable</span></a>&nbsp;</span><a href="https://developer.android.com/reference/kotlin/androidx/compose/foundation/layout/BoxScope.html">BoxScope</a><span class="token punctuation">.</span><span class="token punctuation">(</span>isSlided<span class="token operator">: </span><a href="https://kotlinlang.org/api/core/kotlin-stdlib/kotlin/-boolean/index.html">Boolean</a><span class="token punctuation">, </span>slideFraction<span class="token operator">: </span><a href="https://kotlinlang.org/api/core/kotlin-stdlib/kotlin/-float/index.html">Float</a><span class="token punctuation">, </span>colors<span class="token operator">: </span><a href="../../slidetounlock/com.revenuecat.purchases.slidetounlock/-slide-to-unlock-colors/index.html">SlideToUnlockColors</a><span class="token punctuation">, </span>size<span class="token operator">: </span><a href="https://developer.android.com/reference/kotlin/androidx/compose/ui/unit/DpSize.html">DpSize</a><span class="token punctuation">, </span>orientation<span class="token operator">: </span><a href="../../slidetounlock/com.revenuecat.purchases.slidetounlock/-slide-orientation/index.html">SlideOrientation</a><span class="token punctuation">)</span><span class="token operator"> -&gt; </span><a href="https://kotlinlang.org/api/core/kotlin-stdlib/kotlin/-unit/index.html">Unit</a><span class="token operator"> = </span>{ slided, _, _, size, orient -&gt;
+    SlideToUnlockDefaults.Thumb(
+      modifier = Modifier.size(thumbSize),
+      isSlided = slided,
+      colors = colors,
+      thumbSize = thumbSize,
+      orientation = orient,
+    )
+  }<span class="token punctuation">, </span></span><span class="parameter ">hint<span class="token operator">: </span><span><span class="token annotation builtin">@</span><a href="https://developer.android.com/reference/kotlin/androidx/compose/runtime/Composable.html"><span class="token annotation builtin">Composable</span></a>&nbsp;</span><a href="https://developer.android.com/reference/kotlin/androidx/compose/foundation/layout/BoxScope.html">BoxScope</a><span class="token punctuation">.</span><span class="token punctuation">(</span>isSlided<span class="token operator">: </span><a href="https://kotlinlang.org/api/core/kotlin-stdlib/kotlin/-boolean/index.html">Boolean</a><span class="token punctuation">, </span>slideFraction<span class="token operator">: </span><a href="https://kotlinlang.org/api/core/kotlin-stdlib/kotlin/-float/index.html">Float</a><span class="token punctuation">, </span>hintTexts<span class="token operator">: </span><a href="../../slidetounlock/com.revenuecat.purchases.slidetounlock/-hint-texts/index.html">HintTexts</a><span class="token punctuation">, </span>colors<span class="token operator">: </span><a href="../../slidetounlock/com.revenuecat.purchases.slidetounlock/-slide-to-unlock-colors/index.html">SlideToUnlockColors</a><span class="token punctuation">, </span>paddings<span class="token operator">: </span><a href="https://developer.android.com/reference/kotlin/androidx/compose/foundation/layout/PaddingValues.html">PaddingValues</a><span class="token punctuation">, </span>orientation<span class="token operator">: </span><a href="../../slidetounlock/com.revenuecat.purchases.slidetounlock/-slide-orientation/index.html">SlideOrientation</a><span class="token punctuation">)</span><span class="token operator"> -&gt; </span><a href="https://kotlinlang.org/api/core/kotlin-stdlib/kotlin/-unit/index.html">Unit</a><span class="token operator"> = </span>{ slided, fraction, _, _, paddings, orient -&gt;
+    SlideToUnlockDefaults.Hint(
+      modifier = Modifier.align(Alignment.Center),
+      slideFraction = fraction,
+      hintTexts = hintTexts,
+      isSlided = slided,
+      colors = colors,
+      paddingValues = hintPaddings,
+      orientation = orient,
+    )
+  }</span></span><span class="token punctuation">)</span></div><p class="paragraph">A composable that provides a slide-to-restore functionality.</p><p class="paragraph">This component is built on top of the <a href="../../slidetounlock/com.revenuecat.purchases.slidetounlock/index.html">SlideToUnlock</a> composable and handles the logic for restoring purchases using the RevenueCat SDK. It manages the different states of the restore process (loading, success, error) and communicates them through the <a href="-slide-to-restore.html">onRestoreStateChanged</a> callback.</p><h4 class="">Parameters</h4><div class="table"><div class="table-row" data-filterable-current=":slidetounlock-purchases:dokkaHtmlPartial/commonMain" data-filterable-set=":slidetounlock-purchases:dokkaHtmlPartial/commonMain"><div class="main-subrow keyValue "><div class=""><span class="inline-flex"><div><u><span><span>modifier</span></span></u></div></span></div><div><div class="title"><p class="paragraph">The modifier to be applied to the component.</p></div></div></div></div><div class="table-row" data-filterable-current=":slidetounlock-purchases:dokkaHtmlPartial/commonMain" data-filterable-set=":slidetounlock-purchases:dokkaHtmlPartial/commonMain"><div class="main-subrow keyValue "><div class=""><span class="inline-flex"><div><u><span>on</span><wbr><span>Restore</span><wbr><span>State</span><wbr><span><span>Changed</span></span></u></div></span></div><div><div class="title"><p class="paragraph">A callback that is invoked when the restore state changes. It provides the current <a href="../com.revenuecat.purchases.slidetounlock.purchases/-restore-state/index.html">RestoreState</a>.</p></div></div></div></div><div class="table-row" data-filterable-current=":slidetounlock-purchases:dokkaHtmlPartial/commonMain" data-filterable-set=":slidetounlock-purchases:dokkaHtmlPartial/commonMain"><div class="main-subrow keyValue "><div class=""><span class="inline-flex"><div><u><span><span>colors</span></span></u></div></span></div><div><div class="title"><p class="paragraph">The colors to be used for the component. Defaults to <a href="../../slidetounlock/com.revenuecat.purchases.slidetounlock/-default-slide-to-unlock-colors/index.html">DefaultSlideToUnlockColors</a>.</p></div></div></div></div><div class="table-row" data-filterable-current=":slidetounlock-purchases:dokkaHtmlPartial/commonMain" data-filterable-set=":slidetounlock-purchases:dokkaHtmlPartial/commonMain"><div class="main-subrow keyValue "><div class=""><span class="inline-flex"><div><u><span>hint</span><wbr><span><span>Texts</span></span></u></div></span></div><div><div class="title"><p class="paragraph">The texts to be displayed as hints. Defaults to a restore-specific hint.</p></div></div></div></div><div class="table-row" data-filterable-current=":slidetounlock-purchases:dokkaHtmlPartial/commonMain" data-filterable-set=":slidetounlock-purchases:dokkaHtmlPartial/commonMain"><div class="main-subrow keyValue "><div class=""><span class="inline-flex"><div><u><span>track</span><wbr><span><span>Shape</span></span></u></div></span></div><div><div class="title"><p class="paragraph">Defines the shape of the background track. Defaults to a rounded rectangle.</p></div></div></div></div><div class="table-row" data-filterable-current=":slidetounlock-purchases:dokkaHtmlPartial/commonMain" data-filterable-set=":slidetounlock-purchases:dokkaHtmlPartial/commonMain"><div class="main-subrow keyValue "><div class=""><span class="inline-flex"><div><u><span>thumb</span><wbr><span><span>Size</span></span></u></div></span></div><div><div class="title"><p class="paragraph">The size of the draggable thumb.</p></div></div></div></div><div class="table-row" data-filterable-current=":slidetounlock-purchases:dokkaHtmlPartial/commonMain" data-filterable-set=":slidetounlock-purchases:dokkaHtmlPartial/commonMain"><div class="main-subrow keyValue "><div class=""><span class="inline-flex"><div><u><span>fractional</span><wbr><span><span>Threshold</span></span></u></div></span></div><div><div class="title"><p class="paragraph">The fraction of the track (from 0.0f to 1.0f) that the user must slide the thumb past to trigger the restore process. Defaults to 0.85f (85%).</p></div></div></div></div><div class="table-row" data-filterable-current=":slidetounlock-purchases:dokkaHtmlPartial/commonMain" data-filterable-set=":slidetounlock-purchases:dokkaHtmlPartial/commonMain"><div class="main-subrow keyValue "><div class=""><span class="inline-flex"><div><u><span><span>paddings</span></span></u></div></span></div><div><div class="title"><p class="paragraph">The external padding values to be applied to the entire component.</p></div></div></div></div><div class="table-row" data-filterable-current=":slidetounlock-purchases:dokkaHtmlPartial/commonMain" data-filterable-set=":slidetounlock-purchases:dokkaHtmlPartial/commonMain"><div class="main-subrow keyValue "><div class=""><span class="inline-flex"><div><u><span>hint</span><wbr><span><span>Paddings</span></span></u></div></span></div><div><div class="title"><p class="paragraph">The internal padding values for the hint composable.</p></div></div></div></div><div class="table-row" data-filterable-current=":slidetounlock-purchases:dokkaHtmlPartial/commonMain" data-filterable-set=":slidetounlock-purchases:dokkaHtmlPartial/commonMain"><div class="main-subrow keyValue "><div class=""><span class="inline-flex"><div><u><span>on</span><wbr><span>Slide</span><wbr><span>Fraction</span><wbr><span><span>Changed</span></span></u></div></span></div><div><div class="title"><p class="paragraph">Optional callback invoked with the current slide progress fraction (0f–1f).</p></div></div></div></div><div class="table-row" data-filterable-current=":slidetounlock-purchases:dokkaHtmlPartial/commonMain" data-filterable-set=":slidetounlock-purchases:dokkaHtmlPartial/commonMain"><div class="main-subrow keyValue "><div class=""><span class="inline-flex"><div><u><span>on</span><wbr><span>Slide</span><wbr><span><span>Completed</span></span></u></div></span></div><div><div class="title"><p class="paragraph">A callback that is invoked when the slide gesture is completed, just before the restore process begins.</p></div></div></div></div><div class="table-row" data-filterable-current=":slidetounlock-purchases:dokkaHtmlPartial/commonMain" data-filterable-set=":slidetounlock-purchases:dokkaHtmlPartial/commonMain"><div class="main-subrow keyValue "><div class=""><span class="inline-flex"><div><u><span><span>orientation</span></span></u></div></span></div><div><div class="title"><p class="paragraph">The direction of the sliding gesture. Defaults to <a href="../../slidetounlock/com.revenuecat.purchases.slidetounlock/-slide-orientation/-horizontal/index.html">SlideOrientation.Horizontal</a>.</p></div></div></div></div><div class="table-row" data-filterable-current=":slidetounlock-purchases:dokkaHtmlPartial/commonMain" data-filterable-set=":slidetounlock-purchases:dokkaHtmlPartial/commonMain"><div class="main-subrow keyValue "><div class=""><span class="inline-flex"><div><u><span><span>thumb</span></span></u></div></span></div><div><div class="title"><p class="paragraph">A composable slot for customizing the draggable thumb. It provides the slide state, current slide fraction, colors, size, and orientation.</p></div></div></div></div><div class="table-row" data-filterable-current=":slidetounlock-purchases:dokkaHtmlPartial/commonMain" data-filterable-set=":slidetounlock-purchases:dokkaHtmlPartial/commonMain"><div class="main-subrow keyValue "><div class=""><span class="inline-flex"><div><u><span><span>hint</span></span></u></div></span></div><div><div class="title"><p class="paragraph">A composable slot for customizing the hint text or visuals inside the track. It provides the slide state, current slide fraction, hint texts, colors, paddings, and orientation.</p></div></div></div></div></div></div></div>
+</div>
+    <div class="footer">
+        <a href="#content" id="go-to-top-link" class="footer--button footer--button_go-to-top"></a>
+        <span>© 2025 Copyright</span>
+        <span class="pull-right">
+            <span>Generated by </span>
+            <a class="footer--link footer--link_external" href="https://github.com/Kotlin/dokka">
+                <span>dokka</span>
+            </a>
+        </span>
+    </div>
+            </div>
+        </div>
+    </div>
+</body>
+</html>
