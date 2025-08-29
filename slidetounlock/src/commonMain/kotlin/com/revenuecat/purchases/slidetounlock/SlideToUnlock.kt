@@ -85,15 +85,27 @@ private enum class SlideToUnlockValue { Start, End }
  *
  * Supports horizontal (default) and vertical orientations via [SlideOrientation].
  *
- * @param isSlided Whether the slider has been completed and locked.
- * @param onSlideCompleted Invoked when the user successfully completes the slide gesture.
- * @param orientation The direction of the sliding gesture. Defaults to [SlideOrientation.Horizontal].
- * @param onSlideFractionChanged Optional callback invoked with the current slide progress fraction (0f–1f).
- * @param thumb A composable slot for customizing the draggable thumb.
- * @param hint A composable slot for customizing the hint text or visuals inside the track.
- * @param colors Provides the color scheme for the track, thumb, and hint. Defaults to [DefaultSlideToUnlockColors].
- * @param hintTexts Provides the hint messages (default and slided states).
+ * @param isSlided Whether the slider has been completed and locked. When `true`, the thumb
+ * is fixed at the end and a loading indicator may be shown.
+ * @param onSlideCompleted Invoked when the user successfully completes the slide gesture by
+ * dragging the thumb past the [fractionalThreshold].
  * @param modifier Modifier to be applied to the layout.
+ * @param colors Provides the color scheme for the track, thumb, and hint. Defaults to [DefaultSlideToUnlockColors].
+ * @param hintTexts Provides the hint messages for both the default and slided states.
+ * @param trackShape Defines the shape of the background track. Defaults to a rounded rectangle.
+ * @param thumbSize The size of the draggable thumb.
+ * @param fractionalThreshold The fraction of the track (from 0.0f to 1.0f) that the user must
+ * slide the thumb past to trigger the `onSlideCompleted` callback. Defaults to 0.85f (85%).
+ * @param paddings The external padding values to be applied to the entire component.
+ * @param hintPaddings The internal padding values for the hint composable, used to prevent
+ * the hint from overlapping with the thumb at its start and end positions.
+ * @param onSlideFractionChanged Optional callback invoked with the current slide progress fraction (0f–1f)
+ * as the user drags the thumb.
+ * @param orientation The direction of the sliding gesture. Defaults to [SlideOrientation.Horizontal].
+ * @param thumb A composable slot for customizing the draggable thumb. It provides the slide state,
+ * current slide fraction, colors, size, and orientation.
+ * @param hint A composable slot for customizing the hint text or visuals inside the track. It provides
+ * the slide state, current slide fraction, hint texts, colors, paddings, and orientation.
  */
 @Composable
 public fun SlideToUnlock(
