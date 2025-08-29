@@ -13,7 +13,3 @@ public final class com/revenuecat/slidetounlockdemo/MainActivity : androidx/acti
 	public fun <init> ()V
 }
 
-public final class com/revenuecat/slidetounlockdemo/MainActivityKt {
-	public static final fun StackedVerticalText-FNF3uiM (Ljava/lang/String;Landroidx/compose/ui/Modifier;JLandroidx/compose/runtime/Composer;II)V
-}
-

@@ -15,6 +15,7 @@
  */
 package com.revenuecat.slidetounlockdemo
 
+import SlideToRestore
 import android.os.Bundle
 import android.widget.Toast
 import androidx.activity.ComponentActivity
@@ -63,6 +64,7 @@ import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.platform.LocalLayoutDirection
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.text.style.TextAlign
+import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.DpSize
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
@@ -103,6 +105,7 @@ class MainActivity : ComponentActivity() {
   }
 }
 
+@Preview
 @Composable
 private fun SlideToUnlockStyle0() {
   var isSlided by remember { mutableStateOf(false) }
@@ -118,6 +121,7 @@ private fun SlideToUnlockStyle0() {
   )
 }
 
+@Preview
 @Composable
 private fun SlideToUnlockStyle1() {
   var isSlided by remember { mutableStateOf(false) }
@@ -198,6 +202,7 @@ private fun SlideToUnlockStyle1() {
   )
 }
 
+@Preview
 @Composable
 private fun SlideToUnlockStyle2() {
   val context = LocalContext.current
@@ -266,6 +271,7 @@ private fun SlideToUnlockStyle2() {
   )
 }
 
+@Preview
 @Composable
 private fun SlideToUnlockStyle3() {
   var isSlided by remember { mutableStateOf(false) }
@@ -382,6 +388,7 @@ private fun SlideToUnlockStyle3() {
   )
 }
 
+@Preview
 @Composable
 private fun SlideToUnlockStyle4() {
   var isSlided by remember { mutableStateOf(false) }
@@ -601,7 +608,7 @@ private fun SlideToUnlockStyle5() {
 }
 
 @Composable
-fun StackedVerticalText(
+private fun StackedVerticalText(
   text: String,
   modifier: Modifier = Modifier,
   textColor: Color = Color.Black,
@@ -621,4 +628,10 @@ fun StackedVerticalText(
       )
     }
   }
+}
+
+@Preview
+@Composable
+private fun SlideToPurchasesPreview() {
+  SlideToRestore()
 }

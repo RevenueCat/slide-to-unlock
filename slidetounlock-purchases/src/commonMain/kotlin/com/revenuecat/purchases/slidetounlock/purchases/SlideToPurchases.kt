@@ -70,7 +70,7 @@ public fun SlideToPurchases(
   storeProduct: StoreProduct,
   modifier: Modifier = Modifier,
   colors: SlideToUnlockColors = DefaultSlideToUnlockColors(),
-  hintTexts: HintTexts = HintTexts.defaultHintTexts(),
+  hintTexts: HintTexts = HintTexts.defaultHintTexts().copy(defaultText = "Slide to purchase"),
   onSlideCompleted: () -> Unit = {},
   onPurchaseStateChanged: (PurchaseState) -> Unit = {},
   isPersonalizedPrice: Boolean? = null,
