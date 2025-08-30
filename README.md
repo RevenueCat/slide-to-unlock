@@ -24,7 +24,7 @@
 </a>
 
 ## Contribution 🧡
-Slide to Unlock is maintained by [RevenueCat](https://www.revenuecat.com?utm_medium=organic&utm_source=github&utm_campaign=advocate). [RevenueCat SDK for Android](https://www.revenuecat.com/docs/getting-started/installation/android?utm_medium=organic&utm_source=github&utm_campaign=advocate) allows you to implement in-app subscriptions and a paywall system on top of Google Play Billing. Also, anyone can contribute to improving code, docs, or something following our [Contributing Guideline](https://github.com/Revenuecat/slide-to-unblock/blob/main/CONTRIBUTING.md).
+Slide to Unlock is maintained by [RevenueCat](https://www.revenuecat.com?utm_medium=organic&utm_source=github&utm_campaign=advocate). [RevenueCat SDK for Android](https://www.revenuecat.com/docs/getting-started/installation/android?utm_medium=organic&utm_source=github&utm_campaign=advocate) allows you to implement in-app subscriptions and a paywall system on top of Google Play Billing. Also, anyone can contribute to improving code, docs, or something following our [Contributing Guideline](https://github.com/RevenueCat/slide-to-unlock/blob/main/CONTRIBUTING.md).
 
 ## Download
 [![Maven Central](https://img.shields.io/maven-central/v/com.revenuecat.purchases/slide-to-unlock.svg?label=Maven%20Central)](https://search.maven.org/search?q=g:%22com.revenuecat%22%20AND%20a:%22slidetounlock%22)
