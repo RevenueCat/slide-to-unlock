@@ -585,6 +585,11 @@ fun SlideToPurchases(
 
 By providing these clear and distinct overloads, `SlideToPurchaces` simplifies the process of integrating a beautiful and functional purchase UI into your Jetpack Compose app, allowing you to focus on your app's core logic while providing a great user experience.
 
+## 💡 Idea
+
+The initial idea comes up with [patrick-elmquist](https://github.com/patrick-elmquist)'s demo code & relevant blog post. Special thanks to his work.
+
+
 ## Find this repository useful? 😻
 
 Support it by joining __[stargazers](https://github.com/revenuecat/slide-to-unlock/stargazers)__ for this repository. :star: <br>
