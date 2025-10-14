@@ -23,6 +23,10 @@
 <img src="https://github.com/user-attachments/assets/28d587ad-787a-4f67-9e33-2768a631c6e5" align="right" width="12%"/>
 </a>
 
+## ✍️ Techncial Content
+
+If you want to learn more about how to implement the slide-to-unlock library, how to integrate it with RevenueCat's in-app purchases in Jetpack Compose, and explore real-world examples, check out [Enhance in-app purchase experiences with slide to unlock in Jetpack Compose](https://www.revenuecat.com/blog/engineering/compose-slide-to-unlock/).
+
 ## Contribution 🧡
 Slide to Unlock is maintained by [RevenueCat](https://www.revenuecat.com?utm_medium=organic&utm_source=github&utm_campaign=advocate). [RevenueCat SDK for Android](https://www.revenuecat.com/docs/getting-started/installation/android?utm_medium=organic&utm_source=github&utm_campaign=advocate) allows you to implement in-app subscriptions and a paywall system on top of Google Play Billing. Also, anyone can contribute to improving code, docs, or something following our [Contributing Guideline](https://github.com/RevenueCat/slide-to-unlock/blob/main/CONTRIBUTING.md).
 
