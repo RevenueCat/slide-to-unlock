@@ -1,5 +1,5 @@
 plugins {
-    id(libs.plugins.android.library.get().pluginId)
+    id(libs.plugins.android.kotlin.multiplatform.library.get().pluginId)
     id(libs.plugins.kotlin.multiplatform.get().pluginId)
     id(libs.plugins.kotlin.serialization.get().pluginId)
     id(libs.plugins.jetbrains.compose.get().pluginId)
@@ -26,7 +26,15 @@ mavenPublishing {
 }
 
 kotlin {
-    androidTarget { publishLibraryVariants("release") }
+    android {
+        namespace = "com.revenuecat.purchases.slidetounlock.purchases"
+        compileSdk = com.revenuecat.slidetounlock.Configuration.compileSdk
+        minSdk = com.revenuecat.slidetounlock.Configuration.minSdk
+
+        compilerOptions {
+            jvmTarget.set(org.jetbrains.kotlin.gradle.dsl.JvmTarget.JVM_11)
+        }
+    }
     iosX64()
     iosArm64()
     iosSimulatorArm64()
@@ -45,27 +53,6 @@ kotlin {
     }
 
     explicitApi()
-
-    sourceSets.androidInstrumentedTest.dependencies {
-        implementation(kotlin("test"))
-    }
-}
-
-android {
-    compileSdk = com.revenuecat.slidetounlock.Configuration.compileSdk
-    namespace = "com.revenuecat.purchases.slidetounlock.purchases"
-    defaultConfig {
-        minSdk = com.revenuecat.slidetounlock.Configuration.minSdk
-    }
-
-    compileOptions {
-        sourceCompatibility = JavaVersion.VERSION_11
-        targetCompatibility = JavaVersion.VERSION_11
-    }
-
-    lint {
-        abortOnError = false
-    }
 }
 
 tasks.withType<org.jetbrains.kotlin.gradle.tasks.KotlinJvmCompile>().configureEach {

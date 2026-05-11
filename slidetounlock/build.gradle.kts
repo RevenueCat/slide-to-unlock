@@ -1,7 +1,7 @@
 import com.revenuecat.slidetounlock.Configuration
 
 plugins {
-    id(libs.plugins.android.library.get().pluginId)
+    id(libs.plugins.android.kotlin.multiplatform.library.get().pluginId)
     id(libs.plugins.kotlin.multiplatform.get().pluginId)
     id(libs.plugins.kotlin.serialization.get().pluginId)
     id(libs.plugins.jetbrains.compose.get().pluginId)
@@ -28,39 +28,21 @@ mavenPublishing {
 }
 
 kotlin {
-    androidTarget { publishLibraryVariants("release") }
+    android {
+        namespace = "com.revenuecat.purchases.slidetounlock"
+        compileSdk = Configuration.compileSdk
+        minSdk = Configuration.minSdk
+
+        compilerOptions {
+            jvmTarget.set(org.jetbrains.kotlin.gradle.dsl.JvmTarget.JVM_11)
+        }
+    }
     jvm("desktop")
     iosX64()
     iosArm64()
     iosSimulatorArm64()
     macosX64()
     macosArm64()
-
-    @Suppress("OPT_IN_USAGE")
-    applyHierarchyTemplate {
-        common {
-            group("jvm") {
-                withAndroidTarget()
-                withJvm()
-            }
-            group("skia") {
-                withJvm()
-                group("darwin") {
-                    group("apple") {
-                        group("ios") {
-                            withIosX64()
-                            withIosArm64()
-                            withIosSimulatorArm64()
-                        }
-                        group("macos") {
-                            withMacosX64()
-                            withMacosArm64()
-                        }
-                    }
-                }
-            }
-        }
-    }
 
     sourceSets {
         val commonMain by getting {
@@ -78,27 +60,6 @@ kotlin {
     }
 
     explicitApi()
-
-    sourceSets.androidInstrumentedTest.dependencies {
-        implementation(kotlin("test"))
-    }
-}
-
-android {
-    compileSdk =Configuration.compileSdk
-    namespace = "com.revenuecat.purchases.slidetounlock"
-    defaultConfig {
-        minSdk = Configuration.minSdk
-    }
-
-    compileOptions {
-        sourceCompatibility = JavaVersion.VERSION_11
-        targetCompatibility = JavaVersion.VERSION_11
-    }
-
-    lint {
-        abortOnError = false
-    }
 }
 
 tasks.withType<org.jetbrains.kotlin.gradle.tasks.KotlinJvmCompile>().configureEach {
