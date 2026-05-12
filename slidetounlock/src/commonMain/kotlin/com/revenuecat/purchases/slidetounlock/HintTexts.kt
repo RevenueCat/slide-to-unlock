@@ -26,13 +26,19 @@ import androidx.compose.runtime.Stable
  * that use this class as a parameter can be safely skipped during recomposition if the instance
  * has not changed.
  *
- * @property defaultText The text displayed when the thumb is at the start position.
- * @property slidedText The text displayed when the thumb is at the end position or in a loading state.
+ * @property defaultText The text displayed when the thumb is at the start position ([SlideState.Idle]).
+ * @property slidedText The text displayed when the thumb is at the end position, e.g. while loading ([SlideState.Loading]).
+ * @property successText Optional text displayed when the action completed successfully ([SlideState.Success]).
+ * When `null`, [slidedText] is shown instead.
+ * @property errorText Optional text displayed when the action failed ([SlideState.Error]).
+ * When `null`, [slidedText] is shown instead.
  */
 @Immutable
 public data class HintTexts(
   public val defaultText: String,
   public val slidedText: String,
+  public val successText: String? = null,
+  public val errorText: String? = null,
 ) {
   /**
    * A companion object to provide default values and factory functions for [HintTexts].

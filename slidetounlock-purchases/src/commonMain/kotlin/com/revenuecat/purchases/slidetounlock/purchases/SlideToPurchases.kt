@@ -36,6 +36,7 @@ import com.revenuecat.purchases.kmp.models.SubscriptionOption
 import com.revenuecat.purchases.kmp.models.WinBackOffer
 import com.revenuecat.purchases.slidetounlock.DefaultSlideToUnlockColors
 import com.revenuecat.purchases.slidetounlock.HintTexts
+import com.revenuecat.purchases.slidetounlock.SlideState
 import com.revenuecat.purchases.slidetounlock.SlideToUnlock
 import com.revenuecat.purchases.slidetounlock.SlideToUnlockColors
 import kotlinx.coroutines.Dispatchers
@@ -363,24 +364,27 @@ private fun InternalSlideToPurchases(
   onPurchaseStateChanged: (PurchaseState) -> Unit = {},
 ) {
   val scope = rememberCoroutineScope()
-  var isSlided by rememberSaveable { mutableStateOf(false) }
+  var slideState by rememberSaveable(stateSaver = SlideStateSaver) { mutableStateOf(SlideState.Idle) }
 
   SlideToUnlock(
     modifier = modifier,
-    isSlided = isSlided,
+    state = slideState,
     onSlideCompleted = {
       scope.launch {
+        slideState = SlideState.Loading
         onPurchaseStateChanged.invoke(PurchaseState.Loading)
         try {
           val successfulPurchase = withContext(Dispatchers.IO) {
             onPurchase.invoke()
           }
+          slideState = SlideState.Success
           onPurchaseStateChanged.invoke(
             PurchaseState.Success(
               successfulPurchase = successfulPurchase,
             ),
           )
         } catch (e: Exception) {
+          slideState = SlideState.Error
           onPurchaseStateChanged.invoke(
             PurchaseState.Error(exception = e),
           )
@@ -391,3 +395,6 @@ private fun InternalSlideToPurchases(
     hintTexts = hintTexts,
   )
 }
+
+private val SlideStateSaver: androidx.compose.runtime.saveable.Saver<SlideState, String> =
+  androidx.compose.runtime.saveable.Saver(save = { it.name }, restore = { SlideState.valueOf(it) })

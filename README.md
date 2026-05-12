@@ -80,16 +80,71 @@ You can easily implement a slide-to-unlock feature using the `SlideToUnlock` com
 
 The `SlideToUnlock` composable exposes relevant state parameters, allowing you to hoist the slide status and track when the slide action is completed via a callback.
 
-- `isSlided`: A `Boolean` state that controls the component's state. When `true`, the thumb moves to the end and becomes disabled.
-- `onSlideCompleted`: A lambda that is invoked when the user successfully slides the thumb to the end. You should typically use this to update your `isSlided` state.
+- `state`: A `SlideState` value that controls the component. `SlideState.Idle` keeps the thumb draggable; `Loading`, `Success` and `Error` lock the thumb at the end of the track and show the matching indicator.
+- `onSlideCompleted`: A lambda that is invoked when the user successfully slides the thumb to the end (or activates the component via an accessibility action / keyboard). You should typically use this to move your `state` to `SlideState.Loading`.
 
 ```kotlin
-var isSlided by remember { mutableStateOf(false) }
+var slideState by remember { mutableStateOf(SlideState.Idle) }
 
 SlideToUnlock(
-    isSlided = isSlided,
+    state = slideState,
     modifier = Modifier.fillMaxWidth(),
-    onSlideCompleted = { isSlided = true },
+    onSlideCompleted = { slideState = SlideState.Loading },
+)
+```
+
+### Slide States
+
+`SlideToUnlock` models the full lifecycle of the action triggered by sliding via `SlideState`:
+
+| State | Behavior | Default indicator | Hint text |
+| --- | --- | --- | --- |
+| `Idle` | Thumb is draggable | Arrow | `HintTexts.defaultText` |
+| `Loading` | Thumb locked at end | Circular progress | `HintTexts.slidedText` |
+| `Success` | Thumb locked at end | Check icon | `HintTexts.successText` (falls back to `slidedText`) |
+| `Error` | Thumb locked at end | Close icon | `HintTexts.errorText` (falls back to `slidedText`) |
+
+A typical asynchronous flow:
+
+```kotlin
+var slideState by remember { mutableStateOf(SlideState.Idle) }
+
+LaunchedEffect(slideState) {
+    if (slideState == SlideState.Loading) {
+        slideState = try {
+            doSomethingSuspending()
+            SlideState.Success
+        } catch (e: Exception) {
+            SlideState.Error
+        }
+    }
+}
+
+SlideToUnlock(
+    state = slideState,
+    hintTexts = HintTexts(
+        defaultText = "Slide to confirm",
+        slidedText = "Confirming...",
+        successText = "Confirmed",
+        errorText = "Something went wrong",
+    ),
+    onSlideCompleted = { slideState = SlideState.Loading },
+)
+```
+
+> If you're upgrading from a previous version, the `SlideToUnlock(isSlided: Boolean, ...)` overload still exists but is deprecated — `isSlided = true` maps to `SlideState.Loading`. Migrate to the `state`-based API to use the success and error states.
+
+### Accessibility & Keyboard Support
+
+The track exposes a `Role.Button` semantics node with a state description derived from `HintTexts`. While `state` is `Idle`, it also publishes an accessibility "click" action (labeled by the `actionLabel` parameter) and is focusable, so pressing **Enter** or **Space** while focused triggers `onSlideCompleted` — the same as completing the gesture. Provide a `contentDescription` to override the default announcement, and set `animationsEnabled = false` (e.g. from your "reduce motion" preference) to make the thumb snap between positions and the hint switch without a cross-fade.
+
+```kotlin
+SlideToUnlock(
+    state = slideState,
+    actionLabel = "Confirm",
+    contentDescription = "Confirm your action by sliding the thumb to the end",
+    animationsEnabled = !reduceMotionEnabled,
+    onSlideCompleted = { slideState = SlideState.Loading },
 )
 ```
 
@@ -98,10 +153,10 @@ SlideToUnlock(
 You can customize all colors of the component by leveraging an instance of `DefaultSlideToUnlockColors`, which contains some prebuilt behaviors for providing proper color sets depending on the states, and you can pass it to the `colors` parameter. This allows you to style the track, hint text, thumb, and progress indicator to match your app's theme.
 
 ```kotlin
-var isSlided by remember { mutableStateOf(false) }
+var slideState by remember { mutableStateOf(SlideState.Idle) }
 
 SlideToUnlock(
-    isSlided = isSlided,
+    state = slideState,
     modifier = Modifier
         .fillMaxWidth()
         .padding(16.dp),
@@ -111,7 +166,7 @@ SlideToUnlock(
         thumbColor = Color.White,
         slidedHintColor = Color.White,
     ),
-    onSlideCompleted = { isSlided = true },
+    onSlideCompleted = { slideState = SlideState.Loading },
 )
 ```
 
@@ -124,13 +179,13 @@ val colorStops = arrayOf(
 )
 
 SlideToUnlock(
-    isSlided = isSlided,
+    state = slideState,
     // ...
     colors = DefaultSlideToUnlockColors(
         trackBrush = Brush.verticalGradient(colorStops = colorStops),
         // ...
     ),
-    onSlideCompleted = { isSlided = true },
+    onSlideCompleted = { slideState = SlideState.Loading },
 )
 ```
 
@@ -209,10 +264,10 @@ private class MaterialThemedSlideToUnlockColors : SlideToUnlockColors {
 The text displayed in the track can be customized by passing a `HintTexts` object. This allows you to define different messages for the initial state and the final "slided" state.
 
 ```kotlin
-var isSlided by remember { mutableStateOf(false) }
+var slideState by remember { mutableStateOf(SlideState.Idle) }
 
 SlideToUnlock(
-    isSlided = isSlided,
+    state = slideState,
     modifier = Modifier
         .fillMaxWidth()
         .padding(16.dp),
@@ -220,7 +275,7 @@ SlideToUnlock(
         defaultText = "Slide to subscribe",
         slidedText = "Subscribing...",
     ),
-    onSlideCompleted = { isSlided = true },
+    onSlideCompleted = { slideState = SlideState.Loading },
 )
 ```
 
@@ -230,47 +285,49 @@ For complete control over the appearance and behavior of the thumb and hint, you
 
 #### Customizing the Thumb
 
-The `thumb` slot provides you with the `isSlided` state, the current `slideFraction`, the `colors` object, and the `thumbSize`. You can use these to create dynamic and interactive thumbs.
+The `thumb` slot provides you with the current `state` (`SlideState`), the current `slideFraction`, the `colors` object, the `thumbSize`, and the `orientation`. You can use these to create dynamic and interactive thumbs.
 
-This example replaces the default arrow icon with a rotating app icon and shows a success checkmark when completed.
+This example replaces the default arrow icon with a rotating restore icon and shows a success checkmark when the action completes.
 
 ```kotlin
-var isSlided by remember { mutableStateOf(false) }
-var isCompleted by remember { mutableStateOf(false) }
+var slideState by remember { mutableStateOf(SlideState.Idle) }
 
-LaunchedEffect(isSlided) {
-    if (isSlided) {
+LaunchedEffect(slideState) {
+    if (slideState == SlideState.Loading) {
         delay(1500) // Simulate in-app purchases or any tasks
-        isCompleted = true
+        slideState = SlideState.Success
     }
 }
 
 SlideToUnlock(
-    isSlided = isSlided,
+    state = slideState,
     // ...
-    onSlideCompleted = { isSlided = true },
-    thumb = { slided, fraction, colors, size ->
+    onSlideCompleted = { slideState = SlideState.Loading },
+    thumb = { state, fraction, colors, size, _ ->
         Box(
             modifier = Modifier
                 .size(size)
                 .background(color = colors.thumbColor(), shape = CircleShape),
+            contentAlignment = Alignment.Center,
         ) {
-            if (isCompleted) {
-                Icon(
-                    imageVector = Icons.Default.Done,
-                    contentDescription = "Completed",
-                    tint = Color(0xFF11D483), // Green for success
-                )
-            } else if (slided) {
-                CircularProgressIndicator(
+            when (state) {
+                SlideState.Loading -> CircularProgressIndicator(
                     modifier = Modifier.padding(8.dp),
                     color = colors.progressColor(),
                     strokeWidth = 3.dp,
                 )
-            } else {
-                Icon(
+                SlideState.Success -> Icon(
+                    imageVector = Icons.Default.Check,
+                    contentDescription = "Completed",
+                    tint = colors.successIconColor(),
+                )
+                SlideState.Error -> Icon(
+                    imageVector = Icons.Default.Close,
+                    contentDescription = "Failed",
+                    tint = colors.errorIconColor(),
+                )
+                SlideState.Idle -> Icon(
                     modifier = Modifier
-                        .align(Alignment.Center)
                         .size(30.dp)
                         .rotate(fraction * -360), // Rotate the icon as the user slides
                     imageVector = Icons.Default.Restore,
@@ -292,15 +349,15 @@ This example replaces the default text with a `Row` that includes a `CircularPro
 
 ```kotlin
 SlideToUnlock(
-    isSlided = isSlided,
+    state = slideState,
     // ...
-    onSlideCompleted = { isSlided = true },
-    hint = { slided, fraction, hintTexts, colors, paddings ->
+    onSlideCompleted = { slideState = SlideState.Loading },
+    hint = { state, fraction, hintTexts, colors, paddings, _ ->
         AnimatedContent(
             modifier = Modifier.align(Alignment.Center),
-            targetState = isSlided,
-        ) { isSlidedTarget ->
-            if (isSlidedTarget) {
+            targetState = state,
+        ) { current ->
+            if (current != SlideState.Idle) {
                 Row(
                     horizontalArrangement = Arrangement.Center,
                     verticalAlignment = Alignment.CenterVertically,
@@ -343,11 +400,11 @@ When using a vertical orientation, it's important to provide appropriate size co
 **Example: A Vertical Slider**
 
 ```kotlin
-var isSlided by remember { mutableStateOf(false) }
+var slideState by remember { mutableStateOf(SlideState.Idle) }
 
 SlideToUnlock(
-    isSlided = isSlided,
-    onSlideCompleted = { isSlided = true },
+    state = slideState,
+    onSlideCompleted = { slideState = SlideState.Loading },
     orientation = SlideOrientation.Vertical,
     modifier = Modifier
         .fillMaxHeight()
@@ -367,11 +424,11 @@ The default value is `0.85f` (85%), which requires a deliberate gesture. You can
 This slider will "snap" to the end and trigger `onSlideCompleted` if the user drags it just past the halfway point.
 
 ```kotlin
-var isSlided by remember { mutableStateOf(false) }
+var slideState by remember { mutableStateOf(SlideState.Idle) }
 
 SlideToUnlock(
-    isSlided = isSlided,
-    onSlideCompleted = { isSlided = true },
+    state = slideState,
+    onSlideCompleted = { slideState = SlideState.Loading },
     // The slide will complete if the user drags past the 50% mark.
     fractionalThreshold = 0.5f,
     modifier = Modifier
@@ -396,11 +453,11 @@ Text(
 )
 
 SlideToUnlock(
-    isSlided = isSlided,
+    state = slideState,
     modifier = Modifier
         .fillMaxWidth()
         .padding(16.dp),
-    onSlideCompleted = { isSlided = true },
+    onSlideCompleted = { slideState = SlideState.Loading },
     onSlideFractionChanged = { fraction ->
         slideProgress = fraction
     }
