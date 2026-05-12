@@ -111,6 +111,26 @@ public interface SlideToUnlockColors {
   @Stable
   @Composable
   public fun progressColor(): Color
+
+  /**
+   * Represents the tint of the success indicator shown while the component is in the
+   * [SlideState.Success] state.
+   *
+   * @return The color of the success icon. Defaults to [progressColor].
+   */
+  @Stable
+  @Composable
+  public fun successIconColor(): Color = progressColor()
+
+  /**
+   * Represents the tint of the error indicator shown while the component is in the
+   * [SlideState.Error] state.
+   *
+   * @return The color of the error icon. Defaults to a red tone.
+   */
+  @Stable
+  @Composable
+  public fun errorIconColor(): Color = Color(0xFFE53935)
 }
 
 /**
@@ -130,6 +150,8 @@ public interface SlideToUnlockColors {
  * @property thumbIconColor The color of the icon displayed inside the thumb.
  * @property thumbBrush An optional brush for the thumb.
  * @property progressColor The color used for the circular progress indicator.
+ * @property successColor The tint of the success icon shown in the [SlideState.Success] state.
+ * @property errorColor The tint of the error icon shown in the [SlideState.Error] state.
  */
 @Stable
 public data class DefaultSlideToUnlockColors(
@@ -143,6 +165,8 @@ public data class DefaultSlideToUnlockColors(
   public val thumbIconColor: Color = Color.Black,
   public val thumbBrush: Brush? = null,
   public val progressColor: Color = Color(0xFF11D483),
+  public val successColor: Color = Color(0xFF11D483),
+  public val errorColor: Color = Color(0xFFE53935),
 ) : SlideToUnlockColors {
 
   /**
@@ -219,5 +243,23 @@ public data class DefaultSlideToUnlockColors(
   @Composable
   override fun progressColor(): Color {
     return progressColor
+  }
+
+  /**
+   * Returns the tint used for the success icon.
+   */
+  @Stable
+  @Composable
+  override fun successIconColor(): Color {
+    return successColor
+  }
+
+  /**
+   * Returns the tint used for the error icon.
+   */
+  @Stable
+  @Composable
+  override fun errorIconColor(): Color {
+    return errorColor
   }
 }

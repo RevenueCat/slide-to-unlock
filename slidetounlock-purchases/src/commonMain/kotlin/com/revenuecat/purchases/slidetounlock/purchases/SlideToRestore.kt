@@ -21,6 +21,7 @@ import androidx.compose.runtime.Composable
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.rememberCoroutineScope
+import androidx.compose.runtime.saveable.Saver
 import androidx.compose.runtime.saveable.rememberSaveable
 import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
@@ -32,6 +33,7 @@ import com.revenuecat.purchases.kmp.ktx.awaitRestore
 import com.revenuecat.purchases.slidetounlock.DefaultSlideToUnlockColors
 import com.revenuecat.purchases.slidetounlock.HintTexts
 import com.revenuecat.purchases.slidetounlock.SlideOrientation
+import com.revenuecat.purchases.slidetounlock.SlideState
 import com.revenuecat.purchases.slidetounlock.SlideToUnlock
 import com.revenuecat.purchases.slidetounlock.SlideToUnlockColors
 import com.revenuecat.purchases.slidetounlock.SlideToUnlockDefaults
@@ -42,12 +44,16 @@ import kotlinx.coroutines.IO
 import kotlinx.coroutines.launch
 import kotlinx.coroutines.withContext
 
+private val SlideStateSaver: Saver<SlideState, String> =
+  Saver(save = { it.name }, restore = { SlideState.valueOf(it) })
+
 /**
  * A composable that provides a slide-to-restore functionality.
  *
  * This component is built on top of the [SlideToUnlock] composable and handles the logic for
- * restoring purchases using the RevenueCat SDK. It manages the different states of the restore
- * process (loading, success, error) and communicates them through the [onRestoreStateChanged] callback.
+ * restoring purchases using the RevenueCat SDK. It drives the component through the
+ * [SlideState] lifecycle (loading → success / error) and also reports each transition through the
+ * [onRestoreStateChanged] callback.
  *
  * @param modifier The modifier to be applied to the component.
  * @param onRestoreStateChanged A callback that is invoked when the restore state changes.
@@ -64,6 +70,9 @@ import kotlinx.coroutines.withContext
  * @param onSlideCompleted A callback that is invoked when the slide gesture is completed, just before
  * the restore process begins.
  * @param orientation The direction of the sliding gesture. Defaults to [SlideOrientation.Horizontal].
+ * @param actionLabel The label announced for the accessibility "activate" action while idle.
+ * @param contentDescription Optional content description for the track.
+ * @param animationsEnabled When `false`, the thumb snaps between positions and the hint does not cross-fade.
  * @param thumb A composable slot for customizing the draggable thumb. It provides the slide state,
  * current slide fraction, colors, size, and orientation.
  * @param hint A composable slot for customizing the hint text or visuals inside the track. It provides
@@ -83,50 +92,51 @@ public fun SlideToRestore(
   onSlideFractionChanged: (Float) -> Unit = {},
   onSlideCompleted: () -> Unit = {},
   orientation: SlideOrientation = SlideOrientation.Horizontal,
-  thumb: @Composable BoxScope.(isSlided: Boolean, slideFraction: Float, colors: SlideToUnlockColors, size: DpSize, orientation: SlideOrientation) -> Unit = { slided, _, _, size, orient ->
+  actionLabel: String = "Restore purchases",
+  contentDescription: String? = null,
+  animationsEnabled: Boolean = true,
+  thumb: @Composable BoxScope.(state: SlideState, slideFraction: Float, colors: SlideToUnlockColors, size: DpSize, orientation: SlideOrientation) -> Unit = { slideState, _, _, _, orient ->
     SlideToUnlockDefaults.Thumb(
       modifier = Modifier.size(thumbSize),
-      isSlided = slided,
+      state = slideState,
       colors = colors,
       thumbSize = thumbSize,
       orientation = orient,
     )
   },
-  hint: @Composable BoxScope.(isSlided: Boolean, slideFraction: Float, hintTexts: HintTexts, colors: SlideToUnlockColors, paddings: PaddingValues, orientation: SlideOrientation) -> Unit = { slided, fraction, _, _, paddings, orient ->
+  hint: @Composable BoxScope.(state: SlideState, slideFraction: Float, hintTexts: HintTexts, colors: SlideToUnlockColors, paddings: PaddingValues, orientation: SlideOrientation) -> Unit = { slideState, fraction, _, _, _, orient ->
     SlideToUnlockDefaults.Hint(
       modifier = Modifier.align(Alignment.Center),
       slideFraction = fraction,
       hintTexts = hintTexts,
-      isSlided = slided,
+      state = slideState,
       colors = colors,
       paddingValues = hintPaddings,
       orientation = orient,
+      animationsEnabled = animationsEnabled,
     )
   },
 ) {
   val scope = rememberCoroutineScope()
-  var isSlided by rememberSaveable { mutableStateOf(false) }
+  var slideState by rememberSaveable(stateSaver = SlideStateSaver) { mutableStateOf(SlideState.Idle) }
 
   SlideToUnlock(
     modifier = modifier,
-    isSlided = isSlided,
+    state = slideState,
     onSlideCompleted = {
+      onSlideCompleted.invoke()
       scope.launch {
+        slideState = SlideState.Loading
         onRestoreStateChanged.invoke(RestoreState.Loading)
         try {
           val customerInfo = withContext(Dispatchers.IO) {
-            onSlideCompleted.invoke()
             Purchases.sharedInstance.awaitRestore()
           }
-          onRestoreStateChanged.invoke(
-            RestoreState.Success(
-              customerInfo = customerInfo,
-            ),
-          )
+          slideState = SlideState.Success
+          onRestoreStateChanged.invoke(RestoreState.Success(customerInfo = customerInfo))
         } catch (e: Exception) {
-          onRestoreStateChanged.invoke(
-            RestoreState.Error(exception = e),
-          )
+          slideState = SlideState.Error
+          onRestoreStateChanged.invoke(RestoreState.Error(exception = e))
         }
       }
     },
@@ -139,6 +149,9 @@ public fun SlideToRestore(
     hintPaddings = hintPaddings,
     onSlideFractionChanged = onSlideFractionChanged,
     orientation = orientation,
+    actionLabel = actionLabel,
+    contentDescription = contentDescription,
+    animationsEnabled = animationsEnabled,
     thumb = thumb,
     hint = hint,
   )

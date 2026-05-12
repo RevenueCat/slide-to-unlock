@@ -36,12 +36,13 @@ import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.heightIn
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
-import androidx.compose.foundation.layout.width
+import androidx.compose.foundation.rememberScrollState
 import androidx.compose.foundation.shape.CircleShape
 import androidx.compose.foundation.shape.RoundedCornerShape
+import androidx.compose.foundation.verticalScroll
 import androidx.compose.material.icons.Icons
-import androidx.compose.material.icons.filled.Done
-import androidx.compose.material.icons.filled.Error
+import androidx.compose.material.icons.filled.Check
+import androidx.compose.material.icons.filled.Close
 import androidx.compose.material.icons.filled.Restore
 import androidx.compose.material3.CircularProgressIndicator
 import androidx.compose.material3.Icon
@@ -71,7 +72,9 @@ import androidx.compose.ui.unit.sp
 import com.revenuecat.purchases.slidetounlock.DefaultSlideToUnlockColors
 import com.revenuecat.purchases.slidetounlock.HintTexts
 import com.revenuecat.purchases.slidetounlock.SlideOrientation
+import com.revenuecat.purchases.slidetounlock.SlideState
 import com.revenuecat.purchases.slidetounlock.SlideToUnlock
+import com.revenuecat.purchases.slidetounlock.SlideToUnlockColors
 import com.valentinilk.shimmer.shimmer
 import kotlinx.coroutines.delay
 
@@ -85,6 +88,7 @@ class MainActivity : ComponentActivity() {
           modifier = Modifier
             .fillMaxSize()
             .background(Color(0xFF2B292B))
+            .verticalScroll(rememberScrollState())
             .padding(vertical = 60.dp, horizontal = 20.dp),
           verticalArrangement = Arrangement.spacedBy(20.dp),
         ) {
@@ -99,6 +103,8 @@ class MainActivity : ComponentActivity() {
           SlideToUnlockStyle4()
 
           SlideToUnlockStyle5()
+
+          SlideToUnlockAccessible()
         }
       }
     }
@@ -108,26 +114,26 @@ class MainActivity : ComponentActivity() {
 @Preview
 @Composable
 private fun SlideToUnlockStyle0() {
-  var isSlided by remember { mutableStateOf(false) }
+  var slideState by remember { mutableStateOf(SlideState.Idle) }
 
   SlideToUnlock(
-    isSlided = isSlided,
+    state = slideState,
     modifier = Modifier.fillMaxWidth(),
     hintTexts = HintTexts.defaultHintTexts().copy(
       defaultText = "Slide to purchase",
     ),
     colors = DefaultSlideToUnlockColors(slidedHintColor = Color.White),
-    onSlideCompleted = { isSlided = true },
+    onSlideCompleted = { slideState = SlideState.Loading },
   )
 }
 
 @Preview
 @Composable
 private fun SlideToUnlockStyle1() {
-  var isSlided by remember { mutableStateOf(false) }
+  var slideState by remember { mutableStateOf(SlideState.Idle) }
 
   SlideToUnlock(
-    isSlided = isSlided,
+    state = slideState,
     modifier = Modifier.fillMaxWidth(),
     trackShape = RoundedCornerShape(10.dp),
     hintTexts = HintTexts(
@@ -138,9 +144,9 @@ private fun SlideToUnlockStyle1() {
       endTrackColor = Color(0xFFF2545B),
       slidedHintColor = Color.White,
     ),
-    onSlideCompleted = { isSlided = true },
+    onSlideCompleted = { slideState = SlideState.Loading },
 
-    thumb = { slided, fraction, colors, size, orientation ->
+    thumb = { _, _, _, size, _ ->
       Box(
         modifier = Modifier.size(size),
       ) {
@@ -154,16 +160,16 @@ private fun SlideToUnlockStyle1() {
       }
     },
 
-    hint = { slided, fraction, hintTexts, colors, paddings, orientation ->
+    hint = { state, fraction, hintTexts, colors, paddings, _ ->
       val layoutDirection = LocalLayoutDirection.current
 
       AnimatedContent(
         modifier = Modifier
           .fillMaxWidth()
           .align(Alignment.Center),
-        targetState = slided,
-      ) { slidedState ->
-        if (!slidedState) {
+        targetState = state,
+      ) { current ->
+        if (current == SlideState.Idle) {
           Text(
             modifier = Modifier
               .fillMaxWidth()
@@ -206,14 +212,14 @@ private fun SlideToUnlockStyle1() {
 @Composable
 private fun SlideToUnlockStyle2() {
   val context = LocalContext.current
-  var isSlided by remember { mutableStateOf(false) }
+  var slideState by remember { mutableStateOf(SlideState.Idle) }
 
   val colorStops = arrayOf(
     0.0f to Color.Black,
     1f to Color(0xDC393636),
   )
   SlideToUnlock(
-    isSlided = isSlided,
+    state = slideState,
     modifier = Modifier.fillMaxWidth(),
     trackShape = RoundedCornerShape(10.dp),
     thumbSize = DpSize(width = 65.dp, height = 45.dp),
@@ -224,11 +230,11 @@ private fun SlideToUnlockStyle2() {
       trackBrush = Brush.verticalGradient(colorStops = colorStops),
     ),
     onSlideCompleted = {
-      isSlided = true
+      slideState = SlideState.Loading
       Toast.makeText(context, "unlocked!", Toast.LENGTH_SHORT).show()
     },
-    thumb = { slided, fraction, colors, size, orientation ->
-      val colorStops = arrayOf(
+    thumb = { _, _, colors, size, _ ->
+      val thumbColorStops = arrayOf(
         0.0f to Color.White,
         1f to colors.thumbColor(),
       )
@@ -236,7 +242,7 @@ private fun SlideToUnlockStyle2() {
         modifier = Modifier
           .size(size)
           .background(
-            brush = Brush.verticalGradient(colorStops = colorStops),
+            brush = Brush.verticalGradient(colorStops = thumbColorStops),
             shape = RoundedCornerShape(10.dp),
           ),
       ) {
@@ -250,14 +256,14 @@ private fun SlideToUnlockStyle2() {
         )
       }
     },
-    hint = { slided, fraction, hintTexts, colors, paddings, orientation ->
+    hint = { _, fraction, hintTexts, colors, paddings, _ ->
       val layoutDirection = LocalLayoutDirection.current
       Crossfade(
         modifier = Modifier
           .shimmer()
           .align(Alignment.Center),
-        targetState = isSlided,
-      ) { slided ->
+        targetState = slideState,
+      ) { _ ->
         Text(
           modifier = Modifier.padding(
             start = paddings.calculateStartPadding(layoutDirection),
@@ -274,14 +280,13 @@ private fun SlideToUnlockStyle2() {
 @Preview
 @Composable
 private fun SlideToUnlockStyle3() {
-  var isSlided by remember { mutableStateOf(false) }
-  var isCompleted by remember { mutableStateOf(false) }
+  var slideState by remember { mutableStateOf(SlideState.Idle) }
   val animateColor: Float by animateFloatAsState(
-    if (isCompleted) 1f else 0f,
+    if (slideState == SlideState.Success) 1f else 0f,
     label = "alpha",
     animationSpec = tween(durationMillis = 700),
   )
-  val colors = if (isCompleted) {
+  val colors = if (slideState == SlideState.Success) {
     DefaultSlideToUnlockColors(
       endTrackColor = lerp(Color(0xFFB4AFB4), Color(0xFF11D483), animateColor),
       slidedHintColor = Color.White,
@@ -294,94 +299,45 @@ private fun SlideToUnlockStyle3() {
     )
   }
 
-  LaunchedEffect(isSlided) {
-    if (isSlided) {
+  LaunchedEffect(slideState) {
+    if (slideState == SlideState.Loading) {
       delay(1500)
-      isCompleted = true
+      slideState = SlideState.Success
     }
   }
 
   SlideToUnlock(
-    isSlided = isSlided,
+    state = slideState,
     modifier = Modifier.fillMaxWidth(),
     hintTexts = HintTexts.defaultHintTexts().copy(
       defaultText = "Restore my products",
+      slidedText = "Restoring...",
+      successText = "Restored!",
     ),
     colors = colors,
-    onSlideCompleted = { isSlided = true },
-    thumb = { slided, fraction, colors, size, orientation ->
+    onSlideCompleted = { slideState = SlideState.Loading },
+    thumb = { state, fraction, thumbColors, size, _ ->
       Box(
         modifier = Modifier
           .size(size)
-          .background(color = colors.thumbColor(), shape = CircleShape),
+          .background(color = thumbColors.thumbColor(), shape = CircleShape),
+        contentAlignment = Alignment.Center,
       ) {
-        if (isCompleted) {
-          Icon(
-            modifier = Modifier
-              .align(Alignment.Center)
-              .size(30.dp),
-            imageVector = Icons.Default.Done,
-            tint = colors.thumbIconColor(),
-            contentDescription = "Completed",
-          )
-        } else if (isSlided) {
-          CircularProgressIndicator(
+        when (state) {
+          SlideState.Loading -> CircularProgressIndicator(
             modifier = Modifier.padding(8.dp),
-            color = colors.progressColor(),
+            color = thumbColors.progressColor(),
             strokeWidth = 3.dp,
           )
-        } else {
-          Icon(
+          SlideState.Idle -> Icon(
             modifier = Modifier
-              .align(Alignment.Center)
               .size(30.dp)
               .rotate(fraction * -360),
             imageVector = Icons.Default.Restore,
-            tint = colors.thumbIconColor(),
-            contentDescription = "Slide to unlock",
+            tint = thumbColors.thumbIconColor(),
+            contentDescription = "Slide to restore",
           )
-        }
-      }
-    },
-    hint = { slided, fraction, hintTexts, colors, paddings, orientation ->
-      val layoutDirection = LocalLayoutDirection.current
-
-      AnimatedContent(
-        modifier = Modifier
-          .fillMaxWidth()
-          .align(Alignment.Center),
-        targetState = isSlided,
-      ) { slided ->
-        if (isCompleted) {
-          Text(
-            modifier = Modifier.fillMaxWidth(),
-            text = "Completed!",
-            textAlign = TextAlign.Center,
-            color = colors.slidedHintColor(),
-            style = MaterialTheme.typography.titleMedium,
-          )
-        } else if (!slided) {
-          Text(
-            modifier = Modifier
-              .fillMaxWidth()
-              .padding(
-                start = paddings.calculateStartPadding(
-                  layoutDirection,
-                ),
-              ),
-            text = hintTexts.defaultText,
-            textAlign = TextAlign.Center,
-            color = colors.hintColor(fraction),
-            style = MaterialTheme.typography.titleMedium,
-          )
-        } else {
-          Text(
-            modifier = Modifier.fillMaxWidth(),
-            text = hintTexts.slidedText,
-            textAlign = TextAlign.Center,
-            color = colors.slidedHintColor(),
-            style = MaterialTheme.typography.titleMedium,
-          )
+          else -> SlideToUnlockDefaultThumbIcon(state, thumbColors)
         }
       }
     },
@@ -391,14 +347,13 @@ private fun SlideToUnlockStyle3() {
 @Preview
 @Composable
 private fun SlideToUnlockStyle4() {
-  var isSlided by remember { mutableStateOf(false) }
-  var isCompleted by remember { mutableStateOf(false) }
+  var slideState by remember { mutableStateOf(SlideState.Idle) }
   val animateColor: Float by animateFloatAsState(
-    if (isCompleted) 1f else 0f,
+    if (slideState == SlideState.Error) 1f else 0f,
     label = "alpha",
     animationSpec = tween(durationMillis = 700),
   )
-  val colors = if (isCompleted) {
+  val colors = if (slideState == SlideState.Error) {
     DefaultSlideToUnlockColors(
       endTrackColor = lerp(Color(0xFFB4AFB4), Color(0xFFC91224), animateColor),
       slidedHintColor = Color.White,
@@ -411,94 +366,45 @@ private fun SlideToUnlockStyle4() {
     )
   }
 
-  LaunchedEffect(isSlided) {
-    if (isSlided) {
+  LaunchedEffect(slideState) {
+    if (slideState == SlideState.Loading) {
       delay(1500)
-      isCompleted = true
+      slideState = SlideState.Error
     }
   }
 
   SlideToUnlock(
-    isSlided = isSlided,
+    state = slideState,
     modifier = Modifier.fillMaxWidth(),
     hintTexts = HintTexts.defaultHintTexts().copy(
       defaultText = "Restore my products",
+      slidedText = "Restoring...",
+      errorText = "Failed: check your account",
     ),
     colors = colors,
-    onSlideCompleted = { isSlided = true },
-    thumb = { slided, fraction, colors, size, orientation ->
+    onSlideCompleted = { slideState = SlideState.Loading },
+    thumb = { state, fraction, thumbColors, size, _ ->
       Box(
         modifier = Modifier
           .size(size)
-          .background(color = colors.thumbColor(), shape = CircleShape),
+          .background(color = thumbColors.thumbColor(), shape = CircleShape),
+        contentAlignment = Alignment.Center,
       ) {
-        if (isCompleted) {
-          Icon(
-            modifier = Modifier
-              .align(Alignment.Center)
-              .size(30.dp),
-            imageVector = Icons.Default.Error,
-            tint = colors.thumbIconColor(),
-            contentDescription = "Failed",
-          )
-        } else if (isSlided) {
-          CircularProgressIndicator(
+        when (state) {
+          SlideState.Loading -> CircularProgressIndicator(
             modifier = Modifier.padding(8.dp),
-            color = colors.progressColor(),
+            color = thumbColors.progressColor(),
             strokeWidth = 3.dp,
           )
-        } else {
-          Icon(
+          SlideState.Idle -> Icon(
             modifier = Modifier
-              .align(Alignment.Center)
               .size(30.dp)
               .rotate(fraction * -360),
             imageVector = Icons.Default.Restore,
-            tint = colors.thumbIconColor(),
-            contentDescription = "Slide to unlock",
+            tint = thumbColors.thumbIconColor(),
+            contentDescription = "Slide to restore",
           )
-        }
-      }
-    },
-    hint = { slided, fraction, hintTexts, colors, paddings, orientation ->
-      val layoutDirection = LocalLayoutDirection.current
-
-      AnimatedContent(
-        modifier = Modifier
-          .fillMaxWidth()
-          .align(Alignment.Center),
-        targetState = isSlided,
-      ) { slided ->
-        if (isCompleted) {
-          Text(
-            modifier = Modifier.fillMaxWidth(),
-            text = "Failed: Check out your account",
-            textAlign = TextAlign.Center,
-            color = colors.slidedHintColor(),
-            style = MaterialTheme.typography.titleMedium,
-          )
-        } else if (!slided) {
-          Text(
-            modifier = Modifier
-              .fillMaxWidth()
-              .padding(
-                start = paddings.calculateStartPadding(
-                  layoutDirection,
-                ),
-              ),
-            text = hintTexts.defaultText,
-            textAlign = TextAlign.Center,
-            color = colors.hintColor(fraction),
-            style = MaterialTheme.typography.titleMedium,
-          )
-        } else {
-          Text(
-            modifier = Modifier.fillMaxWidth(),
-            text = hintTexts.slidedText,
-            textAlign = TextAlign.Center,
-            color = colors.slidedHintColor(),
-            style = MaterialTheme.typography.titleMedium,
-          )
+          else -> SlideToUnlockDefaultThumbIcon(state, thumbColors)
         }
       }
     },
@@ -507,14 +413,13 @@ private fun SlideToUnlockStyle4() {
 
 @Composable
 private fun SlideToUnlockStyle5() {
-  var isSlided by remember { mutableStateOf(false) }
-  var isCompleted by remember { mutableStateOf(false) }
+  var slideState by remember { mutableStateOf(SlideState.Idle) }
   val animateColor: Float by animateFloatAsState(
-    if (isCompleted) 1f else 0f,
+    if (slideState == SlideState.Error) 1f else 0f,
     label = "alpha",
     animationSpec = tween(durationMillis = 700),
   )
-  val colors = if (isCompleted) {
+  val colors = if (slideState == SlideState.Error) {
     DefaultSlideToUnlockColors(
       endTrackColor = lerp(Color(0xFFB4AFB4), Color(0xFFC91224), animateColor),
       slidedHintColor = Color.White,
@@ -527,84 +432,124 @@ private fun SlideToUnlockStyle5() {
     )
   }
 
-  LaunchedEffect(isSlided) {
-    if (isSlided) {
+  LaunchedEffect(slideState) {
+    if (slideState == SlideState.Loading) {
       delay(1500)
-      isCompleted = true
+      slideState = SlideState.Error
     }
   }
 
   SlideToUnlock(
-    isSlided = isSlided,
+    state = slideState,
     hintTexts = HintTexts.defaultHintTexts().copy(
       defaultText = "Slide down",
       slidedText = "Loading..",
+      errorText = "Failed",
     ),
     colors = colors,
-    onSlideCompleted = { isSlided = true },
+    onSlideCompleted = { slideState = SlideState.Loading },
     orientation = SlideOrientation.Vertical,
-    thumb = { slided, fraction, colors, size, orientation ->
+    thumb = { state, fraction, thumbColors, size, _ ->
       Box(
         modifier = Modifier
           .size(size)
-          .background(color = colors.thumbColor(), shape = CircleShape),
+          .background(color = thumbColors.thumbColor(), shape = CircleShape),
         contentAlignment = Alignment.Center,
       ) {
-        if (isCompleted) {
-          Icon(
-            modifier = Modifier
-              .align(Alignment.Center)
-              .size(30.dp),
-            imageVector = Icons.Default.Error,
-            tint = colors.thumbIconColor(),
-            contentDescription = "Failed",
-          )
-        } else if (isSlided) {
-          CircularProgressIndicator(
+        when (state) {
+          SlideState.Loading -> CircularProgressIndicator(
             modifier = Modifier.padding(8.dp),
-            color = colors.progressColor(),
+            color = thumbColors.progressColor(),
             strokeWidth = 3.dp,
           )
-        } else {
-          Icon(
+          SlideState.Idle -> Icon(
             modifier = Modifier
-              .align(Alignment.Center)
               .size(30.dp)
               .rotate(fraction * -360),
             imageVector = Icons.Default.Restore,
-            tint = colors.thumbIconColor(),
-            contentDescription = "Slide to unlock",
+            tint = thumbColors.thumbIconColor(),
+            contentDescription = "Slide down to unlock",
           )
+          else -> SlideToUnlockDefaultThumbIcon(state, thumbColors)
         }
       }
     },
-    hint = { slided, fraction, hintTexts, colors, paddings, orientation ->
-
+    hint = { state, fraction, hintTexts, hintColors, _, _ ->
       AnimatedContent(
         modifier = Modifier
           .align(Alignment.Center)
           .onGloballyPositioned {},
-        targetState = isSlided,
-      ) { slided ->
-        if (isCompleted) {
-          StackedVerticalText(
-            text = "Failed",
-            textColor = colors.slidedHintColor(),
-          )
-        } else if (!slided) {
-          StackedVerticalText(
-            text = hintTexts.defaultText,
-            textColor = colors.hintColor(fraction),
-          )
-        } else {
-          StackedVerticalText(
-            text = hintTexts.slidedText,
-            textColor = colors.slidedHintColor(),
-          )
+        targetState = state,
+      ) { current ->
+        val text = when (current) {
+          SlideState.Idle -> hintTexts.defaultText
+          SlideState.Loading -> hintTexts.slidedText
+          SlideState.Success -> hintTexts.successText ?: hintTexts.slidedText
+          SlideState.Error -> hintTexts.errorText ?: hintTexts.slidedText
         }
+        StackedVerticalText(
+          text = text,
+          textColor = if (current == SlideState.Idle) hintColors.hintColor(fraction) else hintColors.slidedHintColor(),
+        )
       }
     },
   )
+}
+
+/**
+ * Showcases the accessibility hooks: a custom [SlideToUnlock] action label, a content description,
+ * and the `successText` hint. The component is fully usable with a screen reader or a keyboard
+ * (focus the track and press Enter/Space).
+ */
+@Composable
+private fun SlideToUnlockAccessible() {
+  var slideState by remember { mutableStateOf(SlideState.Idle) }
+
+  LaunchedEffect(slideState) {
+    if (slideState == SlideState.Loading) {
+      delay(1500)
+      slideState = SlideState.Success
+    }
+  }
+
+  SlideToUnlock(
+    state = slideState,
+    modifier = Modifier.fillMaxWidth(),
+    hintTexts = HintTexts(
+      defaultText = "Slide to confirm",
+      slidedText = "Confirming...",
+      successText = "Confirmed",
+    ),
+    colors = DefaultSlideToUnlockColors(
+      endTrackColor = Color(0xFF11D483),
+      slidedHintColor = Color.White,
+    ),
+    actionLabel = "Confirm",
+    contentDescription = "Confirm your action by sliding the thumb to the end",
+    onSlideCompleted = { slideState = SlideState.Loading },
+  )
+}
+
+@Composable
+private fun SlideToUnlockDefaultThumbIcon(
+  state: SlideState,
+  colors: SlideToUnlockColors,
+) {
+  when (state) {
+    SlideState.Success -> Icon(
+      modifier = Modifier.size(30.dp),
+      imageVector = Icons.Default.Check,
+      tint = colors.successIconColor(),
+      contentDescription = "Completed",
+    )
+    SlideState.Error -> Icon(
+      modifier = Modifier.size(30.dp),
+      imageVector = Icons.Default.Close,
+      tint = colors.errorIconColor(),
+      contentDescription = "Failed",
+    )
+    else -> Unit
+  }
 }
 
 @Composable
